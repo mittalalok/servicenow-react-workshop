@@ -16,6 +16,6 @@ How to use:
 3.	npm run build 
         --> This will build the artifacts using webpack (with production mode) and keep them in dist folder.
 4.	npm run start 
-        --> This is start the node server @8080 port and server the contains from dist folder. 
+        --> This is start the node server @8080 port and serve the contains from dist folder. 
 
 Note: Please ensure that the node version is > = v6.9.1 
