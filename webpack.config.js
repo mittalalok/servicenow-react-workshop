@@ -13,7 +13,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.js$|\.jsx$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader'
@@ -28,6 +28,9 @@ module.exports = {
         loader: 'url-loader?limit=100000'
       }
     ]
+  },
+  resolve: {
+    extensions: [".js", ".jsx", ".json"]
   },
   devServer: {
     port: 3000,

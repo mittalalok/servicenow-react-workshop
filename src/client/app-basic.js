@@ -3,7 +3,10 @@ import './app.sass';
 
 
 export default class App extends Component {
-  state = { headerMessage: null };
+  constructor(props) {
+    super(props);
+    this.state = { headerMessage: null };
+  }
 
   componentDidMount() {
     fetch('/api/getHeader')
