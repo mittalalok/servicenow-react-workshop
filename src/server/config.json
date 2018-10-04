@@ -1,0 +1,13 @@
+{
+  "name": "test-mongoose",
+  "database" : {
+    "name": "test",
+    "url": "localhost",
+    "options": {
+      "useNewUrlParser": true
+    }
+  },
+  "server": {
+    "port": 8010
+  }
+}
