@@ -121,7 +121,8 @@ class BaseController {
           break;
         }
       } catch(e) {
-        logger.warn(e);
+        logger.error(e);
+        logger.error('Cast failed for key: %s and value: %s', key, value);
       }
     }
 
@@ -149,23 +150,34 @@ class BaseController {
   parseOtherParams(query, params) {
     let schema = this.Model.schema;
     const logger = global.logger;
+    const self = this;
     let otherParams = Object.keys(params).filter((d) => d.indexOf('$') !== 0);
     logger.info('Parsing other params....');
     logger.info(otherParams);
-    for(let key of otherParams) {
-      let value = params[key];
+
+    function parseValue(key, value) {
       logger.info('key: %s, value: %s', key, value);
       let type = schema.path(key);
       if (type) {
         if(type instanceof SchemaTypes.String) {
-          this.addQueryForStringField(key, value, query);
+          self.addQueryForStringField(key, value, query);
         } if(type instanceof SchemaTypes.Number) {
-          this.addQueryForNumberField(key, value, query);
+          self.addQueryForNumberField(key, value, query);
         } else {
           logger.warn('Ignoring key: %s, no handler for the particular type', key);
         }
       } else {
         logger.warn('Ignoring key: %s, which was not found in schema', key);
+      }
+    }
+
+
+    for(let key of otherParams) {
+      let value = params[key];
+      if (typeof(value) === 'string') {
+        parseValue(key, value);
+      } else if (value instanceof Array) {
+        value.map((v) => parseValue(key, v));
       }
     }
   }
