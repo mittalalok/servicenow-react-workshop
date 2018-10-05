@@ -163,6 +163,10 @@ class BaseController {
           self.addQueryForStringField(key, value, query);
         } if(type instanceof SchemaTypes.Number) {
           self.addQueryForNumberField(key, value, query);
+        } else if(typeof(type) === 'object') {
+          if (type.instance === 'String') {
+            self.addQueryForStringField(key, value, query);
+          }
         } else {
           logger.warn('Ignoring key: %s, no handler for the particular type', key);
         }
