@@ -201,7 +201,7 @@ class BaseController {
     if (limit > MAX_LIMIT) limit = MAX_LIMIT;
     if (skip < 0) skip = 0;
 
-    logger.info('Sort By Fields: ', sort);
+    logger.info('Sort By Fields: %s', sort);
     let query = this.Model.find();
 
 
