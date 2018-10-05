@@ -175,7 +175,6 @@ class BaseController {
       }
     }
 
-
     for(let key of otherParams) {
       let value = params[key];
       if (typeof(value) === 'string') {
@@ -190,17 +189,25 @@ class BaseController {
 
     let limit = MAX_LIMIT;
     let skip = 0;
+    let sort = '';
+    const logger = global.logger;
     try {
       limit = (params && params.$limit) ? parseInt(params.$limit, 10) : MAX_LIMIT;
       skip = (params && params.$skip) ? parseInt(params.$skip, 10) : 0;
+      sort = (params && params.$sort) ? params.$sort : '';
     } catch(e) {
       //donothing
     }
     if (limit > MAX_LIMIT) limit = MAX_LIMIT;
     if (skip < 0) skip = 0;
 
+    logger.info('Sort By Fields: ', sort);
     let query = this.Model.find();
+
+
+
     parseOtherParams && this.parseOtherParams(query, params);
+    query.sort(sort);
     return {
       query: query,
       limit: limit,
