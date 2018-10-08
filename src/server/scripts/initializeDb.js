@@ -6,7 +6,7 @@ config.logger = logger;
 const Collection = require('./collection');
 
 function initializeCollection(collection, logger, mockData) {
-  return new Promise((resolve, reject) => {
+  return new Promise(function(resolve, reject){
     logger.info('Initializing collection: %s ...', collection.collectionName);
     collection.initialize(mockData)
       .then(
@@ -38,20 +38,30 @@ function run(config) {
   //   logger.error(e);
   //   process.exit(1);
   // });
-  var promises = [];
+  let promises = [];
+  const mockTagData = require('../mockData/category-tags.json');
+  const TagsController = require('../controllers/tags');
+  const tagsCollection = new Collection(new TagsController(config.models.tag), logger);
+  promises.push(initializeCollection(tagsCollection, logger, mockTagData.allTags.map((t) => {return {value: t.toLowerCase()};})));
+
+  const categoryTagsAdder = require('./addTags');
   const CandidateController = require('../controllers/candidates');
   const candidateCollection = new Collection(new CandidateController(config.models.candidate), logger);
   const mockCandidateData = require('../mockData/candidates.json');
-
+  categoryTagsAdder.addTags(mockTagData.categories, 'category', mockCandidateData, 'tags', 'skills');
   promises.push(initializeCollection(candidateCollection, logger, mockCandidateData));
-  Promise.all(promises).then(()=>{
-    logger.info('Successfully completed all operations... exitting.');
-    process.exit(0);
-  }, (e) => {
+
+  Promise.all(promises)
+    .then(()=>{
+      logger.info('Successfully completed all operations... exitting.');
+      process.exit(0);
+    }, handleError);
+
+  function handleError(e) {
     logger.error(e);
     logger.error('Sorry, some errors occured... exitting.');
     process.exit(1);
-  });
+  }
 
 }
 
