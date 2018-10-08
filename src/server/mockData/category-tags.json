@@ -2,29 +2,29 @@
   "categories": [
     {
       "category": "Engineering",
-      "tags": ["javascript", "java", "node", "hadoop",
-        "cloud", "ui", "ux", "selenium", "jest", "mocha", "chai", "sinon", "front end",
-        "full stack", "c/c++", "c#", "angular", "react", "react/redux", "database"
+      "tags": ["Javascript", "Java", "Node", "Hadoop",
+        "Cloud", "UI", "UX", "Selenium", "Jest", "Mocha", "Chai", "Sinon", "Front End",
+        "Full Stack", "C/C++", "C#", "Angular", "React", "React/Redux","Database"
       ]
     },
     {
-      "category": "HR",
-      "tags": ["recruitment", "benefits", "career development", "engagement"]
-    },
-    {
       "category": "Big Data",
-      "tags": ["hadoop", "hbase"]
+      "tags": ["Hadoop", "HBase"]
     },
     {
       "category": "Quality",
-      "tags": ["selenium", "automated", "manual"]
+      "tags": ["Selenium", "Automated", "Manual"]
+    },
+    {
+      "category": "HR",
+      "tags": ["Recruitment", "Benefits", "Career Development", "Engagement"]
     }
   ],
   "allTags" : [
-    "javascript", "java", "node", "hadoop",
-    "cloud", "ui", "ux", "selenium", "jest", "mocha", "chai", "sinon", "front end",
-    "full stack", "c/c++", "c#", "angular", "react", "react/redux","database",
-    "hadoop", "hbase", "automated", "manual",
-    "recruitment", "benefits", "career development", "engagement"
+    "Javascript", "Java", "Node", "Hadoop",
+    "Cloud", "UI", "UX", "Selenium", "Jest", "Mocha", "Chai", "Sinon", "Front End",
+    "Full Stack", "C/C++", "C#", "Angular", "React", "React/Redux","Database",
+    "Hadoop", "HBase", "Automated", "Manual",
+    "Recruitment", "Benefits", "Career Development", "Engagement"
   ]
 }

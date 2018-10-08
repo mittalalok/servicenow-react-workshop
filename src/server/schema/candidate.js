@@ -33,7 +33,7 @@ module.exports = function(config) {
     additional_details  : {type: String, maxlength: 255},
     attachment          : {type: Schema.Types.ObjectId},
     current_employer    : {type: String, maxlength: 255},
-    skills              : [String],
+    skills              : [{type: String, lowercase: true}],
     gender              : {type: String, default: 'M', required:true, enum: ['M','F']},
     // internal           : {type: Boolean, default: false},
   });
