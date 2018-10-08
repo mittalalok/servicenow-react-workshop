@@ -166,6 +166,10 @@ class BaseController {
         } else if(typeof(type) === 'object') {
           if (type.instance === 'String') {
             self.addQueryForStringField(key, value, query);
+          } else if (type.instance === 'Array') {
+            let obj = {};
+            obj[key] = {$in: value.split(' ')};
+            query.where(obj);
           }
         } else {
           logger.warn('Ignoring key: %s, no handler for the particular type', key);
@@ -191,6 +195,8 @@ class BaseController {
     let skip = 0;
     let sort = '';
     const logger = global.logger;
+    let query = this.Model.find();
+
     try {
       limit = (params && params.$limit) ? parseInt(params.$limit, 10) : MAX_LIMIT;
       skip = (params && params.$skip) ? parseInt(params.$skip, 10) : 0;
@@ -202,10 +208,6 @@ class BaseController {
     if (skip < 0) skip = 0;
 
     logger.info('Sort By Fields: %s', sort);
-    let query = this.Model.find();
-
-
-
     parseOtherParams && this.parseOtherParams(query, params);
     query.sort(sort);
     return {
