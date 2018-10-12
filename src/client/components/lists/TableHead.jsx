@@ -40,7 +40,7 @@ class HeaderSearch extends React.Component {
 
 class HeaderLabel extends React.Component {
 	onLabelClick = (e) => {
-		const { onSort, col: { id } } = this.props;
+		const { onSort, col: { id, sortOrder } } = this.props;
 		onSort({
 			col: id, asc: !sortOrder
 		});
