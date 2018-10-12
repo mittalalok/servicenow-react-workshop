@@ -18,7 +18,6 @@ export const CandidatesAPI = {
     },
     
     get(params) {
-        debugger
         const _params = queryString({...this.DEFAULT_PARAMS, ...params})
         return http(SERVER_URL + 'candidates?' + _params);
     }
@@ -29,3 +28,5 @@ const queryString = (queryObj) => {
         return key + '=' + queryObj[key];
     }).join('&');
 };
+
+// TODO: Manage query params in URL

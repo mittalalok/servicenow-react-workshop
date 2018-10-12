@@ -22,32 +22,35 @@ class TableHeader extends React.Component {
 };
 
 class HeaderSearch extends React.Component {
-	render() {
-		const { col: { label, id, sortable }, onSearch } = this.props;
-		// TODO: Move onInputChange out of render
-		const onInputChange = (e) => onSearch({
+	onInputChange = (e) => {
+		const { onSearch, col: { id } } = this.props;
+		onSearch({
 			col: id, value: e.target.value
 		})
-
+	}
+	render() {
+		const { col: { label, id, sortable }, onSearch } = this.props;
 		return (
 			<td className="table-header-cell">
-				{<input type="text" style={{ width: '100%' }} placeholder="Search" onChange={onInputChange} />}
+				{<input type="text" style={{ width: '100%' }} placeholder="Search" onChange={this.onInputChange} />}
 			</td>
 		);
 	}
 }
 
 class HeaderLabel extends React.Component {
-	render() {
-		const { col: { label, id, sortable, sortOrder }, onSort } = this.props;
-		// TODO: Move onInputChange out of render
-		const onLabelClick = (e) => onSort({
+	onLabelClick = (e) => {
+		const { onSort, col: { id } } = this.props;
+		onSort({
 			col: id, asc: !sortOrder
 		});
+	}
+	render() {
+		const { col: { label, id, sortable, sortOrder }, onSort } = this.props;
 		return (
 			<td className="table-header-cell">
 				<div className="label-wrap">
-					<a className={sortable ? 'sortable-label' : ''} onClick={onLabelClick}>{ label }</a>
+					<a className={sortable ? 'sortable-label' : ''} onClick={this.onLabelClick}>{ label }</a>
 					{ isDefined(sortOrder) && sortOrder ? <i className="glyphicon glyphicon-chevron-up"></i> : null}
 					{ isDefined(sortOrder) && !sortOrder ? <i className="glyphicon glyphicon-chevron-down"></i> : null}
 				</div>

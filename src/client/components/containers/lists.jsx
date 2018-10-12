@@ -83,6 +83,7 @@ const CandidatesMeta = [{
 	sortable: false
 }];
 
+// TODO: Refactor, make this generic component
 class ListsView extends React.Component {
 
 	constructor(props) {
