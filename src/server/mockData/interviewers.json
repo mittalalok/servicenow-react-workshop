@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Anupam Singh",
+    "mobile": "22222",
+    "alternate_phone": "222220",
+    "email": "anupam.singh@servicenow.com",
+    "dob": "01/01/1985",
+    "level": "IC4",
+    "department": "Engineering",
+    "business_unit": "Platform"
+  },
+  {
+    "name": "Alok Mittal",
+    "mobile": "11111",
+    "alternate_phone": "111110",
+    "email": "alok.mittal@servicenow.com",
+    "dob": "05/10/1988",
+    "level": "IC3",
+    "department": "Engineering",
+    "business_unit": "Dev Studio"
+  },
+  {
+    "name": "Abhishek Choudhary",
+    "mobile": "33333",
+    "alternate_phone": "33330",
+    "email": "abhishek.choudhary@servicenow.com",
+    "dob": "08/10/1985",
+    "level": "IC3",
+    "department": "Engineering",
+    "business_unit": "Dev Studio"
+  }
+]
