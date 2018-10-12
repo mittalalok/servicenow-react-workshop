@@ -17,12 +17,16 @@ class BaseRestAPI {
 
   configure() {
     let routeConfig = this.routeConfig;
-    if (!routeConfig.controller) return;
+
+    if (!routeConfig.controller)
+      return;
+
     if (routeConfig.routes.all) {
       let allRoute = this.app.route(routeConfig.routes.all);
       routeConfig.getAll && allRoute.get(this.getAll.bind(this));
       routeConfig.post && allRoute.post(this.post.bind(this));
     }
+
     if (routeConfig.routes.id) {
       let idRoute = this.app.route(routeConfig.routes.id);
       if (routeConfig.get) idRoute.get(this.get.bind(this));
