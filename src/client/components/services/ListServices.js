@@ -8,25 +8,8 @@ if (!window.fetch) {
 
 const http = (...args) => window.fetch.apply(null, args).then(res => res.json());
 
-export const CandidatesAPI = {
-
-    DEFAULT_PARAMS: { $limit: 20 },
-
-    getAll() {
-        const params = queryString(this.DEFAULT_PARAMS)
-        return http(SERVER_URL + 'candidates?' + params);
-    },
-    
-    get(params) {
-        const _params = queryString({...this.DEFAULT_PARAMS, ...params})
-        return http(SERVER_URL + 'candidates?' + _params);
+export const ListsAPI = {
+    get(listType, params) {
+        return http(`${SERVER_URL}${listType}?${params}`);
     }
 };
-
-const queryString = (queryObj) => {
-    return Object.keys(queryObj).map(key => {
-        return key + '=' + queryObj[key];
-    }).join('&');
-};
-
-// TODO: Manage query params in URL

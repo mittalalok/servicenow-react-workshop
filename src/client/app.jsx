@@ -6,7 +6,8 @@ import { Route, Switch } from 'react-router';
 import reducer from './reducer';
 import {Router, RouterComponent} from './router';
 
-import ListsView from './components/containers/lists.jsx';
+import ListsView, { listsMiddleWare } from './components/containers/lists.jsx';
+import { AllLists } from './components/containers/allLists.jsx';
 import HomeView from './components/containers/home.jsx';
 import DashboardView from './components/containers/dashboard.jsx';
 import NavLinks from './components/containers/navLinks.jsx';
@@ -16,16 +17,20 @@ import './app.sass';
 
 import {initialState} from './constants';
 
-
 const router = new Router();
 const store = createStore(
   router.createStateWrapper(reducer),
   initialState,
   compose(
     applyMiddleware(
-      router.createMiddlerWare()
+      router.createMiddlerWare(),
+      listsMiddleWare
     ),
   )
+);
+
+const ListsViewContainer = ({ match: { params }}) => (
+      <ListsView params={params}/>
 );
 
 export default class App extends PureComponent {
@@ -38,7 +43,8 @@ export default class App extends PureComponent {
           <div className="main-container container">
             <div>
               <Switch>
-                <Route path="/lists" render={() => (<ListsView/>)} />
+                <Route path="/lists/:listType" component={ListsViewContainer} />
+                <Route path="/lists" component={AllLists} />
                 <Route path="/dashboard" render={() => (<DashboardView/>)} />
                 <Route render={() => (<HomeView/>)}/>
               </Switch>

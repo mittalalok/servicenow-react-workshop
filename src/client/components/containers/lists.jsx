@@ -1,132 +1,131 @@
 import React from 'react';
 import TableHeader from '../lists/TableHead';
-import { CandidatesAPI } from '../services/ListServices';
+import { push } from 'connected-react-router';
+import { ListsAPI } from '../services/ListServices';
 import { TableBody } from '../lists/TableBody';
+import { connect } from 'react-redux';
+import * as allListsSchema from './allLists';
 
-// Temporary
-const interviewersMeta = [{
-	label: 'ID',
-	id: 'id',
-	searchable: true,
-	sortable: true
-}, {
-	label: 'Name',
-	id: 'name',
-	searchable: true,
-	sortable: true
-}, {
-	label: 'Email',
-	id: 'email',
-	searchable: true,
-	sortable: true
-}, {
-	label: 'Mobile',
-	id: 'mobile',
-	searchable: true,
-	sortable: true
-}, {
-	label: 'Date of Birth',
-	id: 'date_of_birth',
-	searchable: true,
-	sortable: true
-}, {
-	label: 'Level',
-	id: 'level',
-	searchable: true,
-	sortable: true
-}, {
-	label: 'Department',
-	id: 'department',
-	searchable: true,
-	sortable: true
-}, {
-	label: 'Business Unit',
-	id: 'business_unit',
-	searchable: true,
-	sortable: true
-}];
+export const initState = { columnData: [], data: [] };
 
-const CandidatesMeta = [{
-	id: 'name',
-	label: 'Name',
-	searchable: true,
-	sortable: true
-}, {
-	id: 'email',
-	label: 'Email',
-	searchable: true,
-	sortable: true
-}, {
-	id: 'mobile',
-	label: 'Mobile',
-	searchable: true,
-	sortable: true
-}, {
-	id: 'qualification',
-	label: 'Qualification',
-	searchable: true,
-	sortable: false
-}, {
-	id: 'current_employer',
-	label: 'Current Employer',
-	searchable: true,
-	sortable: true
-}, {
-	id: 'current_role',
-	label: 'Current Role',
-	searchable: true,
-	sortable: true
-}, {
-	id: 'skills',
-	label: 'Skills',
-	searchable: true,
-	sortable: false
-}];
+const queryString = (queryObj) => {
+    return Object.keys(queryObj).map(key => {
+        return key + '=' + queryObj[key];
+    }).join('&');
+};
 
-// TODO: Refactor, make this generic component
+const queryObj = (queryString) => {
+	if (!queryString) return {};
+
+	return queryString
+		.split('&')
+		.map(param => param.split('='))
+		.reduce((query, param) => ({
+			...query,
+			[param[0]]: param[1]
+		}), {});
+};
+
+const fetchDataMiddleWare = (store, next, action) => {
+	const query = queryString(action.params);
+	ListsAPI.get(action.listType, query).then(res => {
+		action.data = res;
+		window.location.hash = `#/lists/${action.listType}?${query}`;
+		next(action);
+	});
+};
+
+export const listsMiddleWare = store => next => action => {
+	switch(action.type) {
+		case 'fetchData':
+			fetchDataMiddleWare(store, next, action);
+			break;
+		default:
+			next(action);
+	}
+};
+
+const fetchDataReducer = (state, action) => {
+	const schemaName = `${action.listType}Schema`;
+	let columnData = state.columnData.length === 0 ? [...allListsSchema[schemaName]] : state.columnData;
+
+	let sortColumn = action.params['$sort'];
+	let sortOrder;
+	if (sortColumn) {
+		sortOrder = sortColumn[0] === '-' ? false : true;
+		sortColumn = sortColumn[0] === '-' ? sortColumn.slice(1) : sortColumn;
+	}
+	columnData = columnData.map(column => ({
+			...column,
+			searchValue: action.params[column.id] !== undefined ? action.params[column.id]: column.searchValue,
+			sortOrder: sortColumn && column.id === sortColumn ? sortOrder : column.sortOrder
+	}));
+	return {
+		...state,
+		data: action.data.data,
+		columnData
+	}
+};
+
+export const listsReducer = (state = 0, action) => {
+	switch (action.type) {
+		case 'fetchData':
+			return fetchDataReducer(state, action);
+		default:
+			return state;
+	}
+};
+
+const getQuery = () => {
+	const hashParts = window.location.hash.split('?');
+	return hashParts.length > 0 ? queryObj(hashParts[1]) : {};
+}
+
 class ListsView extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { columnData: CandidatesMeta };
+		this.dispatch = props.dispatch;
+		this.listType = props.params.listType;
 		this.fetchData();
 	}
 
-	fetchData = (params) => {
-		CandidatesAPI.get(params).then(res => {
-			this.setState({ listData: res });
-		})
+	fetchData = (listType) => {
+		const params = getQuery();
+		this.dispatch({ type: 'fetchData', listType: this.listType, params });
 	}
 
 	onSearch = ({ col, value }) => {
-		// TODO: Debounce this event
-		this.fetchData({ [col]: value });
+		let params = getQuery();
+		params = {
+			...params,
+			[col]: value
+		};
+		this.dispatch({ type: 'fetchData', listType: this.listType, params });
 	}
 
 	onSort = ({ col, asc }) => {
-		this.fetchData({ $sort: (!asc ? '-' : '') + col });
-		this.setState((prevState) => {
-			return {
-				columnData: prevState.columnData.map(column => {
-					if (column.id === col) column.sortOrder = asc;
-					return column;
-				})
-			}
-		})
+		let params = getQuery();
+		params = {
+			...params,
+			$sort: (!asc ? '-' : '') + col
+		};
+		this.dispatch({ type: 'fetchData', listType: this.listType, params });
 	}
 
 	render() {
+		const { lists } = this.props;
 		return (
 			<div>
 				<table className="list-table">
 					<TableHeader 
-						columnData={this.state.columnData} 
+						columnData={lists.columnData}
 						onSearch={this.onSearch}
 						onSort={this.onSort}
 					/>
 					<TableBody 
-						data={this.state.listData ? this.state.listData.data : null} 
-						columnData={this.state.columnData}
+						data={lists.data}
+						columnData={lists.columnData}
 					/>
 					{/* <TableFooter/>  */}
 				</table>
@@ -135,4 +134,8 @@ class ListsView extends React.Component {
 	}
 }
 
-export default ListsView;
+const dispatchToProps = (dispatch) => dispatch;
+
+const ConnectedListsView = connect(dispatchToProps)(ListsView);
+
+export default ConnectedListsView;

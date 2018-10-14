@@ -29,10 +29,10 @@ class HeaderSearch extends React.Component {
 		})
 	}
 	render() {
-		const { col: { label, id, sortable }, onSearch } = this.props;
+		const { col: { label, id, sortable, searchValue }, onSearch } = this.props;
 		return (
 			<td className="table-header-cell">
-				{<input type="text" style={{ width: '100%' }} placeholder="Search" onChange={this.onInputChange} />}
+				{<input type="text" value={searchValue || ''} style={{ width: '100%' }} placeholder="Search" onChange={this.onInputChange} />}
 			</td>
 		);
 	}
