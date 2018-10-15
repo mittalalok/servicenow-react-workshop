@@ -1,14 +1,14 @@
-const RequirementController = require('../controllers/requirements');
+const SelectionsController = require('../controllers/selections');
 const BaseRestAPI = require('./base');
 const routes = {
-  all: '/api/requirements',
-  id:'/api/requirements/:id'
+  all: '/api/selections',
+  id:'/api/selections/:id'
 };
 
-class RequirementAPI extends BaseRestAPI {
+class SelectionAPI extends BaseRestAPI {
   constructor(config, app) {
     let routeConfig = {
-      controller: new RequirementController(config.models.requirement),
+      controller: new SelectionsController(config.models.selection),
       routes: routes,
       getAll: true,
       get: true,
@@ -21,4 +21,4 @@ class RequirementAPI extends BaseRestAPI {
   }
 }
 
-module.exports = RequirementAPI;
+module.exports = SelectionAPI;

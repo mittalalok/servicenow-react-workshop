@@ -76,10 +76,12 @@ class BaseRestAPI {
   }
 
   get(req, res) {
-    //TODO: Validate param id
     let logger = this.config.logger;
     let controller = this.routeConfig.controller;
-    controller.readById(req.params.id)
+    let options = {
+      populate: req.query.$populate ? (req.query.$populate === 'true') : false
+    };
+    controller.readById(req.params.id, options)
       .then((data) => {
         if (!data) {
           res.status(404).end();

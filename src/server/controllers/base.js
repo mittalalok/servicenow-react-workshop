@@ -4,6 +4,7 @@ const SchemaTypes = require('mongoose').Schema.Types;
 class BaseController {
   constructor(Model) {
     this.Model = Model;
+    this._fieldsToPopulate = [];
   }
 
   clear() {
@@ -18,8 +19,14 @@ class BaseController {
     return this.Model.find(query);
   }
 
-  readById(id) {
-    return this.Model.findById(id);
+  readById(id, options) {
+    let qry = this.Model.findById(id);
+    if (options && options.populate) {
+      this._fieldsToPopulate.forEach((f) => {
+        qry.populate({path: f});
+      });
+    }
+    return qry;
   }
 
   updateById(id, body) {
