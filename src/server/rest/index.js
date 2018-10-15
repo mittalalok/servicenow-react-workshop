@@ -4,6 +4,7 @@ const TagsAPI = require('./tags');
 const InterviewerAPI = require('./interviewers');
 const RequirementsAPI = require('./requirements');
 const SelectionsAPI = require('./selections');
+const InterviewRoundAPI = require('./interview_round');
 
 const bodyParser = require('body-parser');
 
@@ -15,6 +16,7 @@ function init(config, app) {
   new InterviewerAPI(config, app);
   new RequirementsAPI(config, app);
   new SelectionsAPI(config, app);
+  new InterviewRoundAPI(config, app);
 }
 
 

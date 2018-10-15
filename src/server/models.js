@@ -4,6 +4,7 @@ const requirementSchemaCreator = require('./schema/requirement');
 const tagSchemaCreator = require('./schema/tag');
 const interviewerSchemaCreator = require('./schema/interviewer');
 const selectionsSchemaCreator = require('./schema/selection');
+const interviewRoundsSchemaCreator = require('./schema/interview_round');
 
 module.exports = function(config) {
   let models = config.models;
@@ -16,4 +17,5 @@ module.exports = function(config) {
   models.interviewer = mongoose.model('Interviewer', InterviewerSchema);
   models.requirement = mongoose.model('Requirement', requirementSchemaCreator(config));
   models.selection = mongoose.model('Selection', selectionsSchemaCreator(config));
+  models.interviewRound = mongoose.model('InterviewRound', interviewRoundsSchemaCreator(config));
 };
