@@ -1,85 +1,13 @@
 import React from 'react';
 import TableHeader from '../lists/TableHead';
 import { push } from 'connected-react-router';
-import { ListsAPI } from '../services/ListServices';
+import { ListsAPI } from '../../services/ListServices';
 import { TableBody } from '../lists/TableBody';
+import TableFooter from '../../containers/TableFooter';
 import { connect } from 'react-redux';
-import * as allListsSchema from './allLists';
+import { getQuery } from '../../utils/helper';
 
 export const initState = { columnData: [], data: [] };
-
-const queryString = (queryObj) => {
-    return Object.keys(queryObj).map(key => {
-        return key + '=' + queryObj[key];
-    }).join('&');
-};
-
-const queryObj = (queryString) => {
-	if (!queryString) return {};
-
-	return queryString
-		.split('&')
-		.map(param => param.split('='))
-		.reduce((query, param) => ({
-			...query,
-			[param[0]]: param[1]
-		}), {});
-};
-
-const fetchDataMiddleWare = (store, next, action) => {
-	const query = queryString(action.params);
-	ListsAPI.get(action.listType, query).then(res => {
-		action.data = res;
-		window.location.hash = `#/lists/${action.listType}?${query}`;
-		next(action);
-	});
-};
-
-export const listsMiddleWare = store => next => action => {
-	switch(action.type) {
-		case 'fetchData':
-			fetchDataMiddleWare(store, next, action);
-			break;
-		default:
-			next(action);
-	}
-};
-
-const fetchDataReducer = (state, action) => {
-	const schemaName = `${action.listType}Schema`;
-	let columnData = state.columnData.length === 0 ? [...allListsSchema[schemaName]] : state.columnData;
-
-	let sortColumn = action.params['$sort'];
-	let sortOrder;
-	if (sortColumn) {
-		sortOrder = sortColumn[0] === '-' ? false : true;
-		sortColumn = sortColumn[0] === '-' ? sortColumn.slice(1) : sortColumn;
-	}
-	columnData = columnData.map(column => ({
-			...column,
-			searchValue: action.params[column.id] !== undefined ? action.params[column.id]: column.searchValue,
-			sortOrder: sortColumn && column.id === sortColumn ? sortOrder : column.sortOrder
-	}));
-	return {
-		...state,
-		data: action.data.data,
-		columnData
-	}
-};
-
-export const listsReducer = (state = 0, action) => {
-	switch (action.type) {
-		case 'fetchData':
-			return fetchDataReducer(state, action);
-		default:
-			return state;
-	}
-};
-
-const getQuery = () => {
-	const hashParts = window.location.hash.split('?');
-	return hashParts.length > 0 ? queryObj(hashParts[1]) : {};
-}
 
 class ListsView extends React.Component {
 
@@ -91,7 +19,8 @@ class ListsView extends React.Component {
 	}
 
 	fetchData = (listType) => {
-		const params = getQuery();
+		//const params = getQuery();
+		const params = {$limit: 20, $skip: 0};
 		this.dispatch({ type: 'fetchData', listType: this.listType, params });
 	}
 
@@ -127,7 +56,16 @@ class ListsView extends React.Component {
 						data={lists.data}
 						columnData={lists.columnData}
 					/>
-					{/* <TableFooter/>  */}
+				</table>
+				<table className="list-table">
+					<TableFooter 
+						currentFrom={lists.skip ? lists.skip+1 : "1"}  
+						currentTo={lists.limit ? lists.skip+ lists.limit : "20"}  
+						skip={lists.skip ? lists.skip : "0"}
+						limit={lists.limit ? lists.limit : "20"}
+						totalRecords={lists.total ? lists.total : "100"}
+						listType={this.listType}
+					/>
 				</table>
 			</div>
 		);

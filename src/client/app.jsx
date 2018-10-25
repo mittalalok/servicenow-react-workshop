@@ -6,7 +6,8 @@ import { Route, Switch } from 'react-router';
 import reducer from './reducer';
 import {Router, RouterComponent} from './router';
 
-import ListsView, { listsMiddleWare } from './components/containers/lists.jsx';
+import ListsView from './components/containers/lists.jsx';
+import { listsMiddleWare } from './middlewares/listMiddleware';
 import { AllLists } from './components/containers/allLists.jsx';
 import HomeView from './components/containers/home.jsx';
 import DashboardView from './components/containers/dashboard.jsx';

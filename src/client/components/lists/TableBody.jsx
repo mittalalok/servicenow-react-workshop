@@ -13,7 +13,7 @@ export const TableBody = (props) => {
                     <tr key={i}>
                         {
                             columnData.map((column, j) => (
-                                <td className="table-body-column">
+                                <td className="table-body-column" key={j}>
                                     {
                                         row[column.id]
                                     }
