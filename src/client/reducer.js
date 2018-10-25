@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { listsReducer } from './components/containers/lists';
+import { listReducer } from './reducers/listReducer';
 
 const defaultReducer = (state = 0, action) => {
 	return state;
@@ -8,5 +8,5 @@ const defaultReducer = (state = 0, action) => {
 export default combineReducers({
   appName: defaultReducer,
   navLinks: defaultReducer,
-  lists: listsReducer
+  lists: listReducer
 })

@@ -10,12 +10,12 @@ class TableHeader extends React.Component {
 		const { columnData, data, onSort, onSearch } = this.props;
 		return (
 			<thead>
-				<th>
+				<tr>
 					{ columnData.map((col, i) => <HeaderLabel col={col} onSort={onSort} key={i}/>) }
-				</th>
-				<th>
+				</tr>
+				<tr>
 					{ columnData.map((col, i) => <HeaderSearch col={col} onSearch={onSearch} key={i}/>) }
-				</th>
+				</tr>
 			</thead>
 		);
 	}
