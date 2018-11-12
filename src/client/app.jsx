@@ -28,7 +28,7 @@ const store = createStore(
       router.createMiddlerWare(),
       listsMiddleWare
     ),
-  )
+  ),
 );
 
 const ListsViewContainer = ({ match: { params }}) => (
@@ -47,7 +47,7 @@ export default class App extends PureComponent {
               <Switch>
                 <Route path="/lists/:listType" component={ListsViewContainer} />
                 <Route path="/lists" component={AllLists} />
-                <Route path="/edit" render={()=>(<RenderForm/>)} />
+                <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
                 <Route path="/dashboard" render={() => (<DashboardView/>)} />
                 <Route render={() => (<HomeView/>)}/>
                 
