@@ -13,7 +13,7 @@ import HomeView from './components/containers/home.jsx';
 import DashboardView from './components/containers/dashboard.jsx';
 import NavLinks from './components/containers/navLinks.jsx';
 import NavBar from './components/containers/navBar.jsx';
-import Input from './components/forms/input';
+import RenderForm from './components/containers/renderForm';
 
 import './app.sass';
 
@@ -47,7 +47,7 @@ export default class App extends PureComponent {
               <Switch>
                 <Route path="/lists/:listType" component={ListsViewContainer} />
                 <Route path="/lists" component={AllLists} />
-                <Route path="/edit" render={()=>(<Input/>)} />
+                <Route path="/edit" render={()=>(<RenderForm/>)} />
                 <Route path="/dashboard" render={() => (<DashboardView/>)} />
                 <Route render={() => (<HomeView/>)}/>
                 
