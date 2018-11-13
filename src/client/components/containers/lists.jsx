@@ -43,7 +43,7 @@ class ListsView extends React.Component {
 	}
 
   onEdit = () => {
-    this.dispatch({type:'fetch_form'});
+    this.dispatch({type:'fetch_form', url:'5bc04a374cd0c2ba550d201da'});
   }
 
 	render() {

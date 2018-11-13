@@ -24,7 +24,11 @@ export const fetchDataMiddleWare = (store, next, action) => {
 };
 
 const fetchFormData = (store, next, action) => {
-  console.log(action);
-  window.location.hash = 'candidates/5bc04a374cd0c2ba550d201da';
-  next(action);
+  window.location.hash = `candidates/${action.url}`;
+  const http = (...args) => window.fetch.apply(null, args).then(res => res.json());
+  let url = 'http://localhost:8017/api/candidates/5be91efbada72915a7c9bd35';
+  http(url).then(res=>{
+    action.payload = res;
+    next(action);
+  });
 }; 

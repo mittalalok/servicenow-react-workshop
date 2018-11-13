@@ -12,12 +12,13 @@ class RenderForm extends Component {
     let tag = obj.html && obj.html.tag;
     let type = obj.html && obj.html.type;
     let lableValue = obj.html && obj.html.name;
+    let value = obj.html && obj.html.value;
     switch (tag) {
     case 'input':
       return <div className="form-group row" key={lableValue}>
         <Label for="sample" value={lableValue} class="col-sm-2 col-form-label"/>
         <div className="col-sm-10">
-          <Input class="form-control" type={type}  placeHolder={`Enter ${key}`} />
+          <Input class="form-control" type={type}  placeHolder={`Enter ${key}`} value={value}/>
         </div>
       </div>;
       
