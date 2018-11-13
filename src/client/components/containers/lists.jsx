@@ -42,6 +42,10 @@ class ListsView extends React.Component {
 		this.dispatch({ type: 'fetchData', listType: this.listType, params });
 	}
 
+  onEdit = () => {
+    this.dispatch({type:'fetch_form'});
+  }
+
 	render() {
 		const { lists } = this.props;
 		return (
@@ -55,6 +59,7 @@ class ListsView extends React.Component {
 					<TableBody 
 						data={lists.data}
 						columnData={lists.columnData}
+            onEdit = {this.onEdit}
 					/>
 				</table>
 				<table className="list-table">

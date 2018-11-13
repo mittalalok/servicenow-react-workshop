@@ -37,6 +37,8 @@ class RenderForm extends Component {
     return <form>{result}<button className="btn btn-primary" type="submit">Submit form</button></form>;
   }
   render(){
+    if(!this.props.mapper)
+      return null;
     return this.mapKeysToTag(this.props.mapper.candidate);
   }
 }

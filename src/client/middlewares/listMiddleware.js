@@ -6,6 +6,9 @@ export const listsMiddleWare = store => next => action => {
 		case 'fetchData':
 			fetchDataMiddleWare(store, next, action);
 			break;
+    case 'fetch_form':
+      fetchFormData(store, next, action);
+      break;  
 		default:
 			next(action);
 	}
@@ -19,3 +22,9 @@ export const fetchDataMiddleWare = (store, next, action) => {
 		next(action);
 	});
 };
+
+const fetchFormData = (store, next, action) => {
+  console.log(action);
+  window.location.hash = 'candidates/5bc04a374cd0c2ba550d201da';
+  next(action);
+}; 
