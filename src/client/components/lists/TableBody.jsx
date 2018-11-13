@@ -6,8 +6,8 @@ export const TableBody = (props) => {
   const { data, columnData } = props;
   if (!data) return null;
   
-  let onEdit =  () => {
-    props.onEdit();
+  let onEdit =  (id) => {
+    props.onEdit(id);
   };   
   return (
     <tbody>
@@ -24,7 +24,7 @@ export const TableBody = (props) => {
               ))
             }
             <td>
-              <button type="button" className="btn btn-default" aria-label="Right Align" onClick={onEdit}>
+              <button type="button" className="btn btn-default" aria-label="Right Align" onClick={onEdit.bind(this, row['_id'])}>
                 <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
               </button>
             </td>
