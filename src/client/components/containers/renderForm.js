@@ -8,6 +8,11 @@ import {connect} from 'react-redux';
 
 class RenderForm extends Component {
 
+  handleChange(key, value){
+    console.log(`key ${key} -- value ${value}`);
+    //this.dispatch({type:'save_from', payload:{key, value}});
+  }
+
   getTag(obj, key) {
     let tag = obj.html && obj.html.tag;
     let type = obj.html && obj.html.type;
@@ -18,7 +23,7 @@ class RenderForm extends Component {
       return <div className="form-group row" key={lableValue}>
         <Label for="sample" value={lableValue} class="col-sm-2 col-form-label"/>
         <div className="col-sm-10">
-          <Input class="form-control" type={type}  placeHolder={`Enter ${key}`} value={value}/>
+          <Input class="form-control" type={type}  mapKey={key} placeHolder={`Enter ${key}`} value={value} handleChange={this.handleChange}/>
         </div>
       </div>;
       

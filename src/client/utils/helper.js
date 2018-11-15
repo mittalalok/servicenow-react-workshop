@@ -20,3 +20,4 @@ export const getQuery = () => {
 	const hashParts = window.location.hash.split('?');
 	return hashParts.length > 0 ? queryObj(hashParts[1]) : {};
 }
+

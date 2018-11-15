@@ -32,4 +32,26 @@ let candidate = {
   // internal           : {type: Boolean, default: false},
 };
 
-module.exports = {candidate};
+let interviewer = {
+  name                : {type: String, required: true, minlength: 5, maxlength: 255, index: true, html : { type: 'text', tag: 'input', name: 'Name'}},
+  mobile              : {type: String, maxlength: 20, required: true, index: true, html : { type: 'tel', tag: 'input', name: 'Mobile' }},
+  alternate_phone     : {type: String, maxlength: 20, html : { type: 'tel', tag: 'input', name: 'Alt Mobile' }},
+  email               : {type: String, maxlength: 255, required: true, index: true, unique: true,
+    validate: {
+      validator: function(v) {
+        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return emailRegex.test(v);
+      },
+      message: props => `${props.value} is not a valid email`
+    },
+    html : { type: 'email', tag: 'input', name: 'Email'}
+  },
+  dob                 : {type: Date, required: true, html : { type: 'date', tag: 'input', name: 'Date of Birth'}},
+  level		            : {type: String, maxlength: 50, html : { type: 'text', tag: 'input', name: 'Level'}},
+  department          : {type: String, maxlength: 50, required: true, index: true, enum: 'config.types.category_type' , html : { type: 'text', tag: 'input', name: 'Department'} },//TODO check enum
+  business_unit       : {type: String, maxlength: 50, required: true, index: true, enum: 'config.types.business_type', html : { type: 'text', tag: 'input', name: 'Business unit'} },//TODO check enum
+  expertise           : {type: String, lowercase: true, html : { type: 'text', tag: 'input', name: 'Expertise'}}
+
+};
+
+module.exports = {candidate, interviewer};
