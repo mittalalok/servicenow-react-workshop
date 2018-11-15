@@ -22,8 +22,8 @@ Input.propTypes = {
   type: PropTypes.string,
   id: PropTypes.string,
   placeHolder: PropTypes.string,
-  value: PropTypes.string,
-  handleChange: PropTypes.function,
+  value: PropTypes.any,
+  handleChange: PropTypes.func,
   mapKey: PropTypes.string
 };
 
