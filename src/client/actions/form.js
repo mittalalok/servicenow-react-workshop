@@ -3,3 +3,10 @@ export function form() {
     type: 'fetch_from',
   };
 }
+
+export function saveForm(payload){
+  return {
+    type: 'save_form',
+    payload
+  };
+}

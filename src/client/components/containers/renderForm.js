@@ -4,13 +4,26 @@ import Input from '../forms/input';
 import PropTypes from 'prop-types';
 
 import {connect} from 'react-redux';
-
+import { saveForm } from '../../actions/form';
 
 class RenderForm extends Component {
 
+  constructor(props){
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.saveForm = this.saveForm.bind(this);
+    this.state = {payload:{}};
+  }
+
   handleChange(key, value){
-    console.log(`key ${key} -- value ${value}`);
-    //this.dispatch({type:'save_from', payload:{key, value}});
+    let obj = {};
+    obj[key] = value;
+    this.setState({payload:{...this.state.payload, ...obj}});
+  }
+
+  saveForm(event){
+    event.preventDefault();
+    this.props.saveForm(this.state.payload);
   }
 
   getTag(obj, key) {
@@ -32,6 +45,8 @@ class RenderForm extends Component {
     }
   }
 
+
+
   mapKeysToTag(candidate){
     let result = [];
     for(let key in candidate){
@@ -40,7 +55,7 @@ class RenderForm extends Component {
       }
     }
     
-    return <form>{result}<button className="btn btn-primary" type="submit">Submit form</button></form>;
+    return <form onSubmit={this.saveForm}>{result}<button className="btn btn-primary" type="submit">Submit form</button></form>;
   }
   render(){
     if(!this.props.mapper)
@@ -50,11 +65,16 @@ class RenderForm extends Component {
 }
 
 RenderForm.propTypes = {
-  mapper: PropTypes.object
+  mapper: PropTypes.object,
+  saveForm: PropTypes.func
 };
+
+const mapDispatchToProps = dispatch => ({
+  saveForm : payload => dispatch(saveForm(payload))
+});
 
 function mapStateToProps(state){
   return {mapper: state.form.mapper};
 }
 
-export default connect(mapStateToProps)(RenderForm);
+export default connect(mapStateToProps, mapDispatchToProps)(RenderForm);

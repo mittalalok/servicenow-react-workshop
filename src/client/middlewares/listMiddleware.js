@@ -10,7 +10,7 @@ export const listsMiddleWare = store => next => action => {
     fetchFormData(store, next, action);
     break;
   case 'save_form':
-    console.log('found save form');
+    saveFormData(store, next, action);
     break;    
   default:
     next(action);
@@ -36,6 +36,16 @@ const fetchFormData = (store, next, action) => {
     next(action);
   });
 }; 
+
+const saveFormData = (store, next, action)=> {
+  // const http = (...args) => window.fetch.apply(null, args).then(res => res.json());
+  // let schmaName = getSchemaName(window.location.hash);
+  // let url = `http://localhost:8017/api/${schmaName}/${action.url}`;
+
+  // http(url, { method:'put', body: {action.payload}}).then(res=>{
+  //   next(action);
+  // });
+};
 
 const getSchemaName = (hash) => {
   //Add validation checks here
