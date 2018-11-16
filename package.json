@@ -13,6 +13,7 @@
   "author": "Alok Mittal",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "bootstrap-sass": "^3.3.7",
     "bunyan": "^1.8.12",

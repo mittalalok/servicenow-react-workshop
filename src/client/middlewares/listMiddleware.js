@@ -1,5 +1,6 @@
 import { queryString } from '../utils/helper';
 import { ListsAPI } from '../services/ListServices';
+import axios from 'axios';
 
 export const listsMiddleWare = store => next => action => {
 	switch(action.type) {
@@ -38,13 +39,12 @@ const fetchFormData = (store, next, action) => {
 }; 
 
 const saveFormData = (store, next, action)=> {
-  // const http = (...args) => window.fetch.apply(null, args).then(res => res.json());
-  // let schmaName = getSchemaName(window.location.hash);
-  // let url = `http://localhost:8017/api/${schmaName}/${action.url}`;
-
-  // http(url, { method:'put', body: {action.payload}}).then(res=>{
-  //   next(action);
-  // });
+  let parts = window.location.hash.split('/');
+  let url = `http://localhost:8017/api/${parts[1]}/${parts[2]}`;
+  axios.put(url, action.payload).then((res)=>{
+    console.log(res);
+    next(action);
+  });
 };
 
 const getSchemaName = (hash) => {
