@@ -42,8 +42,8 @@ const saveFormData = (store, next, action)=> {
   let parts = window.location.hash.split('/');
   let url = `http://localhost:8017/api/${parts[1]}/${parts[2]}`;
   axios.put(url, action.payload).then((res)=>{
-    console.log(res);
-    next(action);
+    if(res.status === 200)
+      next(action);
   });
 };
 
