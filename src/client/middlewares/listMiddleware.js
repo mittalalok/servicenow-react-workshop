@@ -10,9 +10,7 @@ export const listsMiddleWare = store => next => action => {
   case 'fetch_form':
     fetchFormData(store, next, action);
     break;
-  case 'save_form':
-    saveFormData(store, next, action);
-    break;    
+  
   default:
     next(action);
   }
@@ -28,24 +26,17 @@ export const fetchDataMiddleWare = (store, next, action) => {
 };
 
 const fetchFormData = (store, next, action) => {
-  const http = (...args) => window.fetch.apply(null, args).then(res => res.json());
   let schmaName = getSchemaName(window.location.hash);
   let url = `http://localhost:8017/api/${schmaName}/${action.url}`;
-  http(url).then(res=>{
-    action.payload = res;
-    window.location.hash = `${schmaName}/${action.url}`;
-    next(action);
+  axios.get(url).then(res=>{
+    if(res.status === 200){
+      action.payload = res.data;
+      window.location.hash = `${schmaName}/${action.url}`;
+      next(action);
+    }
   });
 }; 
 
-const saveFormData = (store, next, action)=> {
-  let parts = window.location.hash.split('/');
-  let url = `http://localhost:8017/api/${parts[1]}/${parts[2]}`;
-  axios.put(url, action.payload).then((res)=>{
-    if(res.status === 200)
-      next(action);
-  });
-};
 
 const getSchemaName = (hash) => {
   //Add validation checks here

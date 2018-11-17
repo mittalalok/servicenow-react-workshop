@@ -8,6 +8,7 @@ import {Router, RouterComponent} from './router';
 
 import ListsView from './components/containers/lists.jsx';
 import { listsMiddleWare } from './middlewares/listMiddleware';
+import { formData } from './middlewares/form';
 import { AllLists } from './components/containers/allLists.jsx';
 import HomeView from './components/containers/home.jsx';
 import DashboardView from './components/containers/dashboard.jsx';
@@ -20,14 +21,12 @@ import './app.sass';
 import {initialState} from './constants';
 
 const router = new Router();
+const middlewares = [router.createMiddlerWare(), listsMiddleWare, formData];
 const store = createStore(
   router.createStateWrapper(reducer),
   initialState,
   compose(
-    applyMiddleware(
-      router.createMiddlerWare(),
-      listsMiddleWare
-    ),
+    applyMiddleware(...middlewares),
   ),
 );
 
