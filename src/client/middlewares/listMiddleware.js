@@ -1,5 +1,7 @@
 import { queryString } from '../utils/helper';
 import { ListsAPI } from '../services/ListServices';
+import {getSchemaName} from '../utils/helper';
+
 import axios from 'axios';
 
 export const listsMiddleWare = store => next => action => {
@@ -10,7 +12,6 @@ export const listsMiddleWare = store => next => action => {
   case 'fetch_form':
     fetchFormData(store, next, action);
     break;
-  
   default:
     next(action);
   }
@@ -36,9 +37,3 @@ const fetchFormData = (store, next, action) => {
     }
   });
 }; 
-
-
-const getSchemaName = (hash) => {
-  //Add validation checks here
-  return (hash.split('?')[0]).split('/')[2];
-};
