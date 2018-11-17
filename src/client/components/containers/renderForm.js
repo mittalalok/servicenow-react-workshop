@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import {connect} from 'react-redux';
 import { saveForm } from '../../actions/form';
+import  Toast  from '../forms/toast';
 
 class RenderForm extends Component {
 
@@ -60,13 +61,17 @@ class RenderForm extends Component {
   render(){
     if(!this.props.mapper)
       return null;
-    return this.mapKeysToTag(this.props.mapper);
+    console.log('status current face', this.props.status);  
+    let toast = <Toast status={this.props.status} />;  
+    let template = <div> {toast} {this.mapKeysToTag(this.props.mapper)}</div>;  
+    return template;
   }
 }
 
 RenderForm.propTypes = {
   mapper: PropTypes.object,
-  saveForm: PropTypes.func
+  saveForm: PropTypes.func,
+  status: PropTypes.number,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -74,7 +79,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 function mapStateToProps(state){
-  return {mapper: state.form.mapper};
+  
+  return {mapper: state.form.mapper, status: state.form.status};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenderForm);

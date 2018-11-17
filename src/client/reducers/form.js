@@ -17,10 +17,11 @@ let appendPayLoad = (data, Mapper, domain) => {
 };
 
 export const form = (state = 0, action) => {
+  
   switch (action.type) {
   case 'fetch_form':
-    return { ...state, mapper: appendPayLoad(action.payload, Mapper, action.domain)};
+    return { ...state, mapper: appendPayLoad(action.payload, Mapper, action.domain), status: action.status};
   default:
-    return { ...state};
+    return { ...state, status: action.status};
   }
 };
