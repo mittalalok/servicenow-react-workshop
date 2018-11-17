@@ -1,4 +1,4 @@
-let candidate = {
+let candidates = {
   name                : {type: String, required: true, minlength: 5, maxlength: 255, index: true, html : { type: 'text', tag: 'input', name: 'Name'}},
   street_address      : {type: String, maxlength: 255,html : { type: 'text', tag: 'input', name: 'Street'}},
   city                : {type: String, maxlength: 100 , html : { type: 'text', tag: 'input', name: 'City'}},
@@ -32,7 +32,7 @@ let candidate = {
   // internal           : {type: Boolean, default: false},
 };
 
-let interviewer = {
+let interviewers = {
   name                : {type: String, required: true, minlength: 5, maxlength: 255, index: true, html : { type: 'text', tag: 'input', name: 'Name'}},
   mobile              : {type: String, maxlength: 20, required: true, index: true, html : { type: 'tel', tag: 'input', name: 'Mobile' }},
   alternate_phone     : {type: String, maxlength: 20, html : { type: 'tel', tag: 'input', name: 'Alt Mobile' }},
@@ -54,4 +54,4 @@ let interviewer = {
 
 };
 
-module.exports = {candidate, interviewer};
+module.exports = {candidates, interviewers};

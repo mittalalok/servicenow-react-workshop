@@ -21,3 +21,9 @@ export const getQuery = () => {
 	return hashParts.length > 0 ? queryObj(hashParts[1]) : {};
 }
 
+
+
+export const getSchemaName = (hash) => {
+  //Add validation checks here
+  return (hash.split('?')[0]).split('/')[2];
+};

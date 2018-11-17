@@ -60,7 +60,7 @@ class RenderForm extends Component {
   render(){
     if(!this.props.mapper)
       return null;
-    return this.mapKeysToTag(this.props.mapper.candidate);
+    return this.mapKeysToTag(this.props.mapper);
   }
 }
 

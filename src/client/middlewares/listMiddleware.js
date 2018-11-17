@@ -3,7 +3,7 @@ import { ListsAPI } from '../services/ListServices';
 import axios from 'axios';
 
 export const listsMiddleWare = store => next => action => {
-	switch(action.type) {
+  switch(action.type) {
   case 'fetchData':
     fetchDataMiddleWare(store, next, action);
     break;
@@ -15,7 +15,7 @@ export const listsMiddleWare = store => next => action => {
     break;    
   default:
     next(action);
-	}
+  }
 };
 
 export const fetchDataMiddleWare = (store, next, action) => {
