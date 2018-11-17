@@ -33,7 +33,7 @@ const fetchFormData = (store, next, action) => {
   let url = `http://localhost:8017/api/${schmaName}/${action.url}`;
   http(url).then(res=>{
     action.payload = res;
-    window.location.hash = `candidates/${action.url}`;
+    window.location.hash = `${schmaName}/${action.url}`;
     next(action);
   });
 }; 

@@ -48,6 +48,7 @@ export default class App extends PureComponent {
                 <Route path="/lists/:listType" component={ListsViewContainer} />
                 <Route path="/lists" component={AllLists} />
                 <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
+                <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
                 <Route path="/dashboard" render={() => (<DashboardView/>)} />
                 <Route render={() => (<HomeView/>)}/>
                 
