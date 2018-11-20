@@ -5,8 +5,10 @@ const initialState = {
   navLinks: [{name: 'Home', link: '/'}, {name: 'Lists', link: '/lists'}, {name: 'Dashboard', link: '/dashboard'}],
   lists: listsInitState
 };
-
+const SERVER_URL = 'http://localhost:8017/api/';
 
 export {
-  initialState
+  initialState,
+  SERVER_URL
 };
+
