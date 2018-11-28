@@ -3,7 +3,8 @@ import TableHeader from './TableHead';
 import { TableBody } from './TableBody';
 import TableFooter from '../container/TableFooter';
 
-export const Lists = ({ lists, listType, onSearch, onSort }) => {
+export const Lists = ({ lists, listType, onSearch, onSort, onEdit }) => {
+    
     return (
         <div>
             <table className="list-table">
@@ -15,6 +16,7 @@ export const Lists = ({ lists, listType, onSearch, onSort }) => {
                 <TableBody
                     data={lists.data}
                     columnData={lists.columnData}
+                    onEdit = {onEdit}
                 />
             </table>
             <table className="list-table">
