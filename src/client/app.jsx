@@ -13,21 +13,20 @@ import HomeView from './components/presentational/home';
 import DashboardView from './components/presentational/dashboard';
 import NavLinks from './components/presentational/navLinks';
 import NavBar from './components/presentational/navBar';
-
+import { formData } from './middlewares/form';
+import RenderForm from './components/container/renderForm';
 import './app.sass';
 
 import { initialState } from './constants';
 
 const router = new Router();
+const middlewares = [router.createMiddlerWare(), listsMiddleWare, formData];
 const store = createStore(
-    router.createStateWrapper(reducer),
-    initialState,
-    compose(
-        applyMiddleware(
-            router.createMiddlerWare(),
-            listsMiddleWare
-        ),
-    )
+  router.createStateWrapper(reducer),
+  initialState,
+  compose(
+    applyMiddleware(...middlewares),
+  ),
 );
 
 const ListsViewContainer = ({ match: { params } }) => (
@@ -46,6 +45,8 @@ export default class App extends PureComponent {
                             <Switch>
                                 <Route path="/lists/:listType" component={ListsViewContainer} />
                                 <Route path="/lists" component={AllLists} />
+                                <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
+                                <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
                                 <Route path="/dashboard" render={() => (<DashboardView/>)} />
                                 <Route render={() => (<HomeView/>)}/>
                             </Switch>
