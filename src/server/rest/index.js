@@ -9,14 +9,14 @@ const InterviewRoundAPI = require('./interview_round');
 const bodyParser = require('body-parser');
 
 function init(config, app) {
-  app.use(bodyParser.json());
-  new CandidateApi(config, app);
-  new TypesApi(config, app);
-  new TagsAPI(config, app);
-  new InterviewerAPI(config, app);
-  new RequirementsAPI(config, app);
-  new SelectionsAPI(config, app);
-  new InterviewRoundAPI(config, app);
+    app.use(bodyParser.json());
+    new CandidateApi(config, app);
+    new TypesApi(config, app);
+    new TagsAPI(config, app);
+    new InterviewerAPI(config, app);
+    new RequirementsAPI(config, app);
+    new SelectionsAPI(config, app);
+    new InterviewRoundAPI(config, app);
 }
 
 

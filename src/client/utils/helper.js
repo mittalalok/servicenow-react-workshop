@@ -5,18 +5,22 @@ export const queryString = (queryObj) => {
 };
 
 const queryObj = (queryString) => {
-	if (!queryString) return {};
+    if (!queryString) return {};
 
-	return queryString
-		.split('&')
-		.map(param => param.split('='))
-		.reduce((query, param) => ({
-			...query,
-			[param[0]]: param[1]
-		}), {});
+    return queryString
+        .split('&')
+        .map(param => param.split('='))
+        .reduce((query, param) => ({
+            ...query,
+            [param[0]]: param[1]
+        }), {});
 };
 
+const defaultParams = { $limit: 20, $skip: 0 };
+
 export const getQuery = () => {
-	const hashParts = window.location.hash.split('?');
-	return hashParts.length > 0 ? queryObj(hashParts[1]) : {};
-}
+    const hashParts = window.location.hash.split('?');
+    return hashParts.length > 0 && hashParts[1] ? queryObj(hashParts[1]) : defaultParams;
+};
+
+export const isDefined = (a) => typeof a !== 'undefined' && a !== null;

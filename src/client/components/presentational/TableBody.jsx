@@ -1,7 +1,5 @@
 import React from 'react';
 
-const Fragment = ({ children }) => children;
-
 export const TableBody = (props) => {
     const { data, columnData } = props;
     if (!data) return null;

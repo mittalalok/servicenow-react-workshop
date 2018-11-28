@@ -1,6 +1,6 @@
 
 const bunyan = require('bunyan');
-const defaultLogger = bunyan.createLogger({name: 'addTags'});
+const defaultLogger = bunyan.createLogger({ name: 'addTags' });
 /*
 // Example of usage
 function addTagsToCandidates() {
@@ -12,20 +12,20 @@ function addTagsToCandidates() {
 }*/
 
 function addTags(fieldNameWithTags, fieldName, records, tagFieldName = 'tags', recordFieldName='tags', logger = defaultLogger) {
-  for(let cd of fieldNameWithTags) {
-    let fieldValue = cd[fieldName];
-    let tags = cd[tagFieldName];
-    let recordsHavingFieldValue = records.filter((d) => d[fieldName] === fieldValue);
-    logger.info('Found: %s records having %s value : %s', recordsHavingFieldValue.length, fieldName, fieldValue);
-    logger.info('Tags to insert: %s', JSON.stringify(tags));
-    recordsHavingFieldValue.forEach((c) => {
-      let numTags = tags.length;
-      let random = parseInt(Math.random() * Math.floor(numTags), 10);
-      c[recordFieldName] = tags.slice(0, random);
-    });
-  }
+    for(let cd of fieldNameWithTags) {
+        let fieldValue = cd[fieldName];
+        let tags = cd[tagFieldName];
+        let recordsHavingFieldValue = records.filter((d) => d[fieldName] === fieldValue);
+        logger.info('Found: %s records having %s value : %s', recordsHavingFieldValue.length, fieldName, fieldValue);
+        logger.info('Tags to insert: %s', JSON.stringify(tags));
+        recordsHavingFieldValue.forEach((c) => {
+            let numTags = tags.length;
+            let random = parseInt(Math.random() * Math.floor(numTags), 10);
+            c[recordFieldName] = tags.slice(0, random);
+        });
+    }
 }
 
 module.exports = {
-  addTags
+    addTags
 };
