@@ -7,6 +7,9 @@ const initialState = {
 };
 
 
+const SERVER_URL = 'http://localhost:8017/api/';
+
 export {
-  initialState
+  initialState,
+  SERVER_URL
 };

@@ -24,3 +24,8 @@ export const getQuery = () => {
 };
 
 export const isDefined = (a) => typeof a !== 'undefined' && a !== null;
+
+export const getSchemaName = (hash) => {
+  //Add validation checks here
+  return (hash.split('?')[0]).split('/')[2];
+};

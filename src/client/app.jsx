@@ -19,20 +19,19 @@ import Login from './components/container/login';
 
 import './sass/app.sass';
 
+import { formData } from './middlewares/form';
+import RenderForm from './components/container/renderForm';
+
 import { initialState } from './constants';
 
 const router = new Router();
+const middlewares = [router.createMiddlerWare(), listsMiddleWare, restMiddleWare, formData];
 const store = createStore(
   router.createStateWrapper(reducer),
   initialState,
   compose(
-    applyMiddleware(
-      router.createMiddlerWare(),
-      listsMiddleWare,
-      restMiddleWare
-
-    ),
-  )
+    applyMiddleware(...middlewares),
+  ),
 );
 
 const ListsViewContainer = ({ match: { params } }) => (
@@ -54,6 +53,8 @@ export default class App extends PureComponent {
                 <Route path="/login" component={Login} />
                 <Route path="/main" component={MainView} />
                 <Route path="/dashboard" render={() => (<DashboardView/>)} />
+                <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
+                <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
                 <Route render={() => (<HomeView/>)}/>
               </Switch>
             </div>

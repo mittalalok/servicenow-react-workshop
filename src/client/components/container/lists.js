@@ -41,8 +41,12 @@ class ListsView extends Component {
     this.dispatchFetchData(params);
   }
 
+  onEdit = (id) => {
+    this.dispatch({ type:'fetch_form', url:id, domain:window.location.hash });
+  }
+
   render() {
-    return <Lists lists={this.props.lists} onSort={this.onSort} onSearch={this.onSearch} listType={this.listType}/>;
+    return <Lists lists={this.props.lists} onSort={this.onSort} onSearch={this.onSearch} listType={this.listType} onEdit = {this.onEdit}/>;
   }
 }
 
