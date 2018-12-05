@@ -57,6 +57,11 @@ function run(config) {
     categoryTagsAdder.addTags(mockTagData.categories, 'category', mockInterviewerData, 'tags', 'expertise');
     promises.push(initializeCollection(interviewerCollection, logger, mockInterviewerData));
 
+    const RequirementsController = require('../controllers/requirements');
+    const RequirementsCollection = new Collection(new RequirementsController(config.models.requirement), logger);
+    const mockRequirementsData = require('../mockData/requirements.json');
+    promises.push(initializeCollection(RequirementsCollection, logger, mockRequirementsData));
+
     Promise.all(promises)
         .then(()=>{
             logger.info('Successfully completed all operations... exitting.');
