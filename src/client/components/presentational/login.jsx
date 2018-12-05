@@ -12,29 +12,24 @@ export default class Login extends React.PureComponent {
   static propTypes = {
     heading: PropTypes.string.isRequired,
     selectedUser: NamedObjectType,
+    selectedRole: NamedObjectType,
     roles: PropTypes.arrayOf(NamedObjectType),
     users: PropTypes.arrayOf(NamedObjectType),
     changeRole: PropTypes.func,
     searchUser: PropTypes.func,
     onUserSelect: PropTypes.func,
     loginSuccess: PropTypes.func.isRequired,
+    loginButtonEnabled: PropTypes.bool.isRequired,
+    showDropdown: PropTypes.bool.isRequired,
+    requestingData: PropTypes.bool.isRequired,
   };
-  static defaultProps = {
-    heading: '',
-    roles: [],
-    selectedUser: null,
-    changeRole: ()=>{},
-    searchUser: ()=>{},
-    onUserSelect: ()=>{},
-    loginSuccess: ()=>{}
-  };
-
+  
   onChangeRole(e) {
     this.props.changeRole(e.target.selectedIndex);
   }
 
   onUserChange(val) {
-    this.props.searchUser(val);
+    this.props.searchUser({ role: this.props.selectedRole, search: val });
   }
 
   onClick(e) {
@@ -70,7 +65,7 @@ export default class Login extends React.PureComponent {
             <br/>
             <div className="form-group">
               <div className="col-sm-offset-10 col-sm-2">
-                <button type="submit" className="btn btn-primary" onClick={this.onClick.bind(this)}>Login</button>
+                <button disabled={this.props.loginButtonEnabled ? '' : 'disabled'} type="submit" className="btn btn-primary" onClick={this.onClick.bind(this)}>Login</button>
               </div>
             </div>
           </form>

@@ -16,6 +16,7 @@ import NavLinks from './components/presentational/navLinks';
 import NavBar from './components/presentational/navBar';
 import MainView from './components/presentational/main';
 import Login from './components/container/login';
+import UserProfile from './components/presentational/userProfile';
 
 import './sass/app.sass';
 
@@ -44,7 +45,10 @@ export default class App extends PureComponent {
     return <Provider store={store}>
       <RouterComponent router={router}>
         <div>
-          <NavBar brandName={state.appName}><NavLinks store={store} data={state.navLinks}/></NavBar>
+          <NavBar brandName={state.appName}>
+            <NavLinks store={store} data={state.navLinks}/>
+            <span className="pull-right"><UserProfile store={store}/></span>
+          </NavBar>
           <div className="main-container container">
             <div>
               <Switch>

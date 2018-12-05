@@ -75,7 +75,7 @@ class SearchBox extends React.PureComponent {
     this.lastText = '';
     this.delayedCallback = debounce((evt) => {
       let newValue = evt.target.value;
-      if(this.lastText !== newValue && newValue.length) {
+      if(this.lastText !== newValue){
         this.lastText = newValue;
         props.onKeyDown(newValue);
       }
@@ -86,9 +86,10 @@ class SearchBox extends React.PureComponent {
   keyDownHandler(e) {
     e.persist();
     if(e.keyCode === KEYCODES.KEY_UP || e.keyCode === KEYCODES.KEY_DOWN) {
+      //TODO Handle Keyboard events like Up, Down, Tab and Enter
       return;
     }
-    
+
     this.delayedCallback(e);
   }
 
@@ -103,7 +104,7 @@ class SearchBox extends React.PureComponent {
     return (
       <div>
         <input ref={this.textInput} type="text" className="form-control" id="inputSuccess2"
-          onKeyDown={this.keyDownHandler.bind(this)} defaultValue={this.props.selectedValue}/>
+          autoComplete="off" onKeyDown={this.keyDownHandler.bind(this)} defaultValue={this.props.selectedValue}/>
         <span className="glyphicon glyphicon-search form-control-feedback"
           aria-hidden="true"></span>
         <SearchBoxDropDownList data={this.props.data}

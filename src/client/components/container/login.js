@@ -9,11 +9,12 @@ const stateToProps = (state) => {
   return {
     heading: login.heading,
     roles: login.roles,
-    selectedRole: login.selectedRole,
     requestingData: login.requestingData,
     users: login.users,
     showDropdown: login.showDropdown,
-    selectedUser: login.selectedUser
+    selectedRole: login.selectedRole,
+    selectedUser: login.selectedUser,
+    loginButtonEnabled: login.loginButtonEnabled
   };
 };
 
@@ -25,9 +26,9 @@ const dispatchToProps = (dispatch) => {
     changeRole: (index) => {
       dispatch(selectRole(index));
     },
-    searchUser: (text) => {
-      dispatch(requestingData(text));
-      dispatch(requestData({ text }, (data)=>{
+    searchUser: (params) => {
+      dispatch(requestingData());
+      dispatch(requestData(params, (data)=>{
         dispatch(updateUserList(data));
       }));
     },
