@@ -35,7 +35,7 @@ const STYLES = {
 function createHTMLElement(name, id, content) {
   let elem = document.createElement(name);
   elem.id = id;
-  elem.innerHTML = content;
+  if (content) elem.innerHTML = content;
   return elem;
 }
 
@@ -58,14 +58,17 @@ class Modal extends React.Component {
 
 
   render() {
-    let modalView = <div className={CLASS_NAMES.overlay}
-      style={{ ...STYLES.overlay }} >
-      <div className={CLASS_NAMES.content}
-        style={{ ...STYLES.content }}
-        tabIndex='-1'>
-        {this.props.children && this.props.children}
-      </div>
-    </div>;
+    let modalView = null;
+    if (this.props.isOpen){
+      modalView = <div className={CLASS_NAMES.overlay}
+        style={{ ...STYLES.overlay }} >
+        <div className={CLASS_NAMES.content}
+          style={{ ...STYLES.content }}
+          tabIndex='-1'>
+          {this.props.children && this.props.children}
+        </div>
+      </div>;
+    }
     if (!this.node) {
       this.node = createHTMLElement('div', 'modal-container');
       document.body.appendChild(this.node);
