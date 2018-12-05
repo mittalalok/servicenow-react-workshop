@@ -9,6 +9,18 @@ class Collection {
         return this.controller.clear();
     }
 
+    get(){
+      return new Promise((resolve, reject) => {
+        this.controller.query().then((d)=>{
+          //logger.info('Inserted %s Records.', d.length);
+          resolve(d);
+        }, (e)=>{
+          //logger.error(e);
+          reject(e);
+        })
+      });
+    }
+
     initialize(md) {
         const logger = this.logger;
         return new Promise((resolve, reject)  => {

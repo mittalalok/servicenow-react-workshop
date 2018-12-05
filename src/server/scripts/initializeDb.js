@@ -57,21 +57,31 @@ function run(config) {
     const mockInterviewerData = require('../mockData/interviewers.json');
     categoryTagsAdder.addTags(mockTagData.categories, 'category', mockInterviewerData, 'tags', 'expertise');
     promises.push(initializeCollection(interviewerCollection, logger, mockInterviewerData));
-
-    const RequirementsController = require('../controllers/requirements');
-    const RequirementsCollection = new Collection(new RequirementsController(config.models.requirement), logger);
-    const mockRequirementsData = require('../mockData/requirements.json');
-    promises.push(initializeCollection(RequirementsCollection, logger, mockRequirementsData));
-
-    const selectionController = require('../controllers/selections');
-    const selectionCollection = new Collection(new selectionController(config.models.selection), logger);
-    const mockSelectionData = require('../mockData/selections.json');
-    promises.push(initializeCollection(selectionCollection, logger, mockSelectionData));
-
+    
+    let mockRefData = (candidateCollection) => {
+      interviewerCollection.get().then((d)=>{
+      let dataSize = d.data.length;
+      const RequirementsController = require('../controllers/requirements');
+      const RequirementsCollection = new Collection(new RequirementsController(config.models.requirement), logger);
+      let mockRequirementsData = require('../mockData/requirements.json');
+      let newdata = mockRequirementsData.map((item)=> {
+        let randomNumber = Math.floor(Math.random() * Math.floor(dataSize));
+        let id = d.data[randomNumber] && d.data[randomNumber]._id;
+        item.manager = id;
+        item.hr_contact = id;
+        return item;
+      })
+      Promise.all([initializeCollection(RequirementsCollection, logger, newdata)]).then(()=>{
+        process.exit(0);
+      });
+      });
+    };
+    
     Promise.all(promises)
         .then(()=>{
             logger.info('Successfully completed all operations... exitting.');
-            process.exit(0);
+            mockRefData(candidateCollection);
+            //process.exit(0);
         }, handleError);
 
     function handleError(e) {
