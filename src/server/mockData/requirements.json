@@ -1,0 +1,24 @@
+[
+  {
+  "skills": ["JavaScript", "Java", "React"], 
+  "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+  "details": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+  "min_experience": 5,
+  "max_experience": 7,
+  "business_unit" : "Dev Studio",
+  "manager": "5c07624531608d54ced58f33",
+  "hr_contact": "5c07624531608d54ced58f34",
+  "vacancies": 5
+  },
+  {
+    "skills": ["SQL", "Java"], 
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "details": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+    "min_experience": 2,
+    "max_experience": 3,
+    "business_unit" : "Dev Studio",
+    "manager": "5c07632b125ea2605e433bdf",
+    "hr_contact": "5c07632b125ea2605e433bdf",
+    "vacancies": 10
+    }
+]

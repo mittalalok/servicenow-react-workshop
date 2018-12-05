@@ -38,6 +38,7 @@ function run(config) {
     //   logger.error(e);
     //   process.exit(1);
     // });
+    
     let promises = [];
     const mockTagData = require('../mockData/category-tags.json');
     const TagsController = require('../controllers/tags');
@@ -61,6 +62,11 @@ function run(config) {
     const RequirementsCollection = new Collection(new RequirementsController(config.models.requirement), logger);
     const mockRequirementsData = require('../mockData/requirements.json');
     promises.push(initializeCollection(RequirementsCollection, logger, mockRequirementsData));
+
+    const selectionController = require('../controllers/selections');
+    const selectionCollection = new Collection(new selectionController(config.models.selection), logger);
+    const mockSelectionData = require('../mockData/selections.json');
+    promises.push(initializeCollection(selectionCollection, logger, mockSelectionData));
 
     Promise.all(promises)
         .then(()=>{
