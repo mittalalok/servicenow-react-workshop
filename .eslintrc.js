@@ -11,6 +11,7 @@ module.exports = {
       , "plugin:react/recommended"
 
     ],
+    "parser": "babel-eslint",
     "parserOptions": {
        "sourceType": "module",
         "ecmaFeatures": {
@@ -34,11 +35,15 @@ module.exports = {
         "quotes": [
             "error",
             "single"
-        ]
-        , "semi": [
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "object-curly-spacing": [
             "error",
             "always"
         ]
         // , "no-unused-vars": ["error", { "vars": "all", "args": "after-used" }]
-    }
+    },
 };

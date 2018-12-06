@@ -1,4 +1,5 @@
 node_modules
 dist
 *.log
+.vscode/
 package-lock.json

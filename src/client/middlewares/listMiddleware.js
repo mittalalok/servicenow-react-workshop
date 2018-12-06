@@ -1,8 +1,8 @@
 import { queryString } from '../utils/helper';
 import { ListsAPI } from '../services/ListServices';
-import {getSchemaName} from '../utils/helper';
-
+import { getSchemaName } from '../utils/helper';
 import axios from 'axios';
+import { SERVER_URL } from '../constants';
 
 export const listsMiddleWare = store => next => action => {
   switch(action.type) {
@@ -18,17 +18,17 @@ export const listsMiddleWare = store => next => action => {
 };
 
 export const fetchDataMiddleWare = (store, next, action) => {
-	let query = queryString(action.params);
-	ListsAPI.get(action.listType, query).then(res => {
-		action.data = res;
-		window.location.hash = `#/lists/${action.listType}?${query}`;
-		next(action);
-	});
+  let query = queryString(action.params);
+  ListsAPI.get(action.listType, query).then(res => {
+    action.data = res;
+    window.location.hash = `#/lists/${action.listType}?${query}`;
+    next(action);
+  });
 };
 
 const fetchFormData = (store, next, action) => {
   let schmaName = getSchemaName(window.location.hash);
-  let url = `http://localhost:8017/api/${schmaName}/${action.url}`;
+  let url = `${SERVER_URL}${schmaName}/${action.url}`;
   axios.get(url).then(res=>{
     if(res.status === 200){
       action.payload = res.data;
@@ -36,4 +36,4 @@ const fetchFormData = (store, next, action) => {
       next(action);
     }
   });
-}; 
+};

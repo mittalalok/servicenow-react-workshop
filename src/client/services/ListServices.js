@@ -1,4 +1,4 @@
-import { SERVER_URL } from './Config';
+import { SERVER_URL } from './config';
 
 // Example URL: 'candidates?$limit=200&experience=$gt240&gender=m&experience=$lt280&qualification=PHD&$sort=-email name” (edited)';
 

@@ -1,5 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
 export default class NavBar extends PureComponent {
   render() {
     return <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -15,5 +16,5 @@ export default class NavBar extends PureComponent {
 
 NavBar.propTypes = {
   brandName: PropTypes.string,
-  children: PropTypes.object
+  children: PropTypes.any
 };
