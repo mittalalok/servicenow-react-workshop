@@ -38,6 +38,7 @@ function run(config) {
     //   logger.error(e);
     //   process.exit(1);
     // });
+    
     let promises = [];
     const mockTagData = require('../mockData/category-tags.json');
     const TagsController = require('../controllers/tags');
@@ -56,11 +57,66 @@ function run(config) {
     const mockInterviewerData = require('../mockData/interviewers.json');
     categoryTagsAdder.addTags(mockTagData.categories, 'category', mockInterviewerData, 'tags', 'expertise');
     promises.push(initializeCollection(interviewerCollection, logger, mockInterviewerData));
+    
+    let mockRefData = (interviewerCollection) => {
+      interviewerCollection.get().then((d)=>{
+      let dataSize = d.data.length;
+      const RequirementsController = require('../controllers/requirements');
+      const RequirementsCollection = new Collection(new RequirementsController(config.models.requirement), logger);
+      let mockRequirementsData = require('../mockData/requirements.json');
+      let newdata = mockRequirementsData.map((item)=> {
+        let randomNumber = Math.floor(Math.random() * Math.floor(dataSize));
+        let id = d.data[randomNumber] && d.data[randomNumber]._id;
+        item.manager = id;
+        item.hr_contact = id;
+        return item;
+      })
+      
+      initializeCollection(RequirementsCollection, logger, newdata).then(()=>{
+        let candiateIds = [], requirementIds = [];
+        let candidatePromise = new Promise((resolve, reject)=>{
+          candidateCollection.get().then((d)=>{
+          candiateIds = d.data && d.data.map(item=>item._id);
+          resolve();
+          });
+        })
+        
+        let RequirementsPromise = new Promise((resolve, reject)=>{
+          RequirementsCollection.get().then((d)=>{
+          requirementIds = d.data && d.data.map(item=>item._id);
+          resolve();
+          });
+        })
 
+          Promise.all([candidatePromise, RequirementsPromise])
+            .then(()=>{
+              let candiateIdsSize = candiateIds.length;
+              let requirementIdSize = requirementIds.length;
+              let getRandom = (seed) => {
+                return Math.floor(Math.random() * Math.floor(seed))
+              }
+              const SelectionController = require('../controllers/selections');
+              const SelectionCollection = new Collection(new SelectionController(config.models.selection), logger);
+              const mockSelectionData = require('../mockData/selections.json');
+              let newdata = mockSelectionData.map((item)=> {
+                item.requirement = requirementIds[getRandom(requirementIdSize)];
+                item.candidate = candiateIds[getRandom(candiateIdsSize)]
+                return item;
+              })
+              initializeCollection(SelectionCollection, logger, newdata).then(()=>{
+                logger.info('Successfully completed all operations... exitting.');
+                process.exit(0);
+              });
+          });
+        })
+      });
+    };
+    
     Promise.all(promises)
         .then(()=>{
-            logger.info('Successfully completed all operations... exitting.');
-            process.exit(0);
+            
+            mockRefData(interviewerCollection);
+            //process.exit(0);
         }, handleError);
 
     function handleError(e) {
