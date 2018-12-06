@@ -20,5 +20,16 @@
     "manager": "",
     "hr_contact": "",
     "vacancies": 10
-    }
+  },
+  {
+    "skills": ["Agile", "Scrum", "Release Management"], 
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "details": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+    "min_experience": 10,
+    "max_experience": 15,
+    "business_unit" : "Community",
+    "manager": "",
+    "hr_contact": "",
+    "vacancies": 4
+  }
 ]
