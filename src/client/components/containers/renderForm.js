@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { saveForm } from '../../actions/form';
 import  Toast  from '../forms/toast';
+// import Mapper from '../../utils/typeMapping';
 
 class RenderForm extends Component {
 
@@ -14,39 +15,105 @@ class RenderForm extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.saveForm = this.saveForm.bind(this);
     this.state = {payload:{}};
+    this.save = true;
+    this.invalidField = {name: '', status: false};
   }
 
   handleChange(key, value){
     let obj = {};
     obj[key] = value;
-    this.setState({payload:{...this.state.payload, ...obj}});
+    console.log('obj:',obj);
+    this.validate(obj);
+  }
+
+  validateEmail(email){
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return emailRegex.test(email);
+  }
+
+  validate(arg){
+    // let save = true;
+    console.log('arg:',arg);
+    if(arg.length <= 0)
+      this.save = false;
+      // save = false;
+
+    if(arg['expertise'])
+      arg.expertise = arg.expertise.toLowerCase();
+
+    if(arg.email)
+      if(!this.validateEmail(arg.email)){
+        this.invalidField.status = true;
+        this.invalidField.name = 'email';
+        this.save = false;
+      }
+      else{
+        this.invalidField.status = false;
+        this.invalidField.name = 'email';
+        this.save = true;
+      }
+
+    this.setState({payload:{...this.state.payload, ...arg}});
+    return this.save;
+    // this.save = false;
   }
 
   saveForm(event){
     event.preventDefault();
-    this.props.saveForm(this.state.payload);
+
+    if(this.validate(this.state.payload)){
+      console.log('payload:', this.state.payload);
+      this.props.saveForm(this.state.payload);
+    }
+    else
+      alert('Error in submitting the form');
+  }
+  InputTag(obj, key) {
+    let type = obj.type;
+    let value = obj.value;
+    let required = obj.required === true;
+    let minlength = obj.minlength;
+    let maxlength = obj.maxlength;
+    let options = obj.enum;
+    let tag = [];
+    let checked = false;
+
+    switch (type) {
+    case 'radio':
+      for(let option in options){
+        if(options[option] == value)
+          checked = true;
+        tag.push(<span key={options[option]}><Input class="form-control radio-inline" type={type}  mapKey={key} placeHolder={`Enter ${key}`} value={options[option]} handleChange={this.handleChange} required={required} name={key} checked={checked}/>{options[option]}</span>);
+      }
+      return tag;
+    case 'date':
+      return <Input class="form-control" type={type}  mapKey={key} placeHolder={`Enter ${key}`} value={value} handleChange={this.handleChange} required={required} name={key} />;
+    case 'file':
+      return <Input class="form-control" type={type}  mapKey={key} placeHolder={`Enter ${key}`} value={value} handleChange={this.handleChange} required={required} name={key} accept='application/pdf'/>;
+    default:
+      return <Input class="form-control" type={type}  mapKey={key} placeHolder={`Enter ${key}`} value={value} handleChange={this.handleChange} required={required} name={key} min={minlength} max={maxlength}/>;
+
+    }
   }
 
   getTag(obj, key) {
-    let tag = obj.html && obj.html.tag;
-    let type = obj.html && obj.html.type;
-    let lableValue = obj.html && obj.html.name;
-    let value = obj.html && obj.html.value;
+    let tag = obj.tag;
+    let lableValue = obj.name;
+    let required = obj.required === true;
+
     switch (tag) {
     case 'input':
-      return <div className="form-group row" key={lableValue}>
-        <Label for="sample" value={lableValue} class="col-sm-2 col-form-label"/>
-        <div className="col-sm-10">
-          <Input class="form-control" type={type}  mapKey={key} placeHolder={`Enter ${key}`} value={value} handleChange={this.handleChange}/>
+      return <div className="form-group col-sm-6" key={lableValue}>
+        <Label for={key} value={lableValue} class="col-sm-6 col-form-label" required={required}/>
+        <div className="col-sm-6">
+          {this.InputTag(obj, key)}
         </div>
       </div>;
-      
+
     default:
       break;
     }
   }
-
-
 
   mapKeysToTag(candidate){
     let result = [];
@@ -55,15 +122,21 @@ class RenderForm extends Component {
         result.push(this.getTag(candidate[key], key));
       }
     }
-    
     return <form onSubmit={this.saveForm}>{result}<button className="btn btn-primary" type="submit">Submit form</button></form>;
   }
   render(){
     if(!this.props.mapper)
       return null;
-    console.log('status current face', this.props.status);  
-    let toast = <Toast status={this.props.status} />;  
-    let template = <div> {toast} {this.mapKeysToTag(this.props.mapper)}</div>;  
+    console.log('status current face', this.props.status);
+    // let toast = <Toast status={this.props.status} />;
+    let toast = '';
+    if(this.invalidField.status){
+      toast = <Toast invalidField={this.invalidField.status} field={this.invalidField.name} status={this.props.status}/>;
+    }
+    else{
+      toast = <Toast status={this.props.status} />;
+    }
+    let template = <div> {toast} {this.mapKeysToTag(this.props.mapper)}</div>;
     return template;
   }
 }
@@ -79,7 +152,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 function mapStateToProps(state){
-  
   return {mapper: state.form.mapper, status: state.form.status};
 }
 
