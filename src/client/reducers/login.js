@@ -1,5 +1,6 @@
 import { EventTypes } from '../actions/login';
 
+
 const initialState = {
   heading: 'Login',
   users: [],
@@ -8,6 +9,7 @@ const initialState = {
     { name: 'Manager', id: 'Manager' }],
   selectedUser: null,
   selectedRole: null,
+  currentHoveredUserIndex: 0,
   requestingData: false,
   loginButtonEnabled: false,
   showDropdown: false
@@ -21,11 +23,16 @@ export const loginReducer = (state = initialState, action) => {
     temp = state.roles.find((t, i) => i === action.index);
     return Object.assign(state, { selectedRole: temp, loginButtonEnabled: false, selectedUser: null });
   case EventTypes.requestingData:
-    return Object.assign(state, { requestingData: true, showDropdown: true, loginButtonEnabled: false, selectedUser: null });
+    return Object.assign(state, { requestingData: true, showDropdown: true, loginButtonEnabled: false, selectedUser: null, currentHoveredUserIndex: 0 });
   case EventTypes.updateUserList:
     return Object.assign(state, { requestingData: false, users: action.data });
   case EventTypes.selectedUser:
-    return Object.assign(state, { selectedUser: action.data, showDropdown: false, loginButtonEnabled: true });
+    if(action.data)
+      return Object.assign(state, { selectedUser: action.data, showDropdown: false, loginButtonEnabled: true });
+    else
+      return Object.assign(state, { selectedUser: null, showDropdown: false, loginButtonEnabled: false });
+  case EventTypes.hoveredUser:
+    return Object.assign(state, { currentHoveredUserIndex: action.index });
   default:
     return state;
   }
