@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export const TableBody = (props) => {
   const { data, columnData } = props;
@@ -32,4 +33,10 @@ export const TableBody = (props) => {
       }
     </tbody>
   );
+};
+
+TableBody.propTypes = {
+  onEdit: PropTypes.func,
+  data: PropTypes.array,
+  columnData: PropTypes.array
 };

@@ -3,10 +3,9 @@ import Label from '../forms/label';
 import Input from '../forms/input';
 import PropTypes from 'prop-types';
 
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { saveForm } from '../../actions/form';
 import  Toast  from '../forms/toast';
-// import Mapper from '../../utils/typeMapping';
 
 class RenderForm extends Component {
 
@@ -14,15 +13,14 @@ class RenderForm extends Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.saveForm = this.saveForm.bind(this);
-    this.state = {payload:{}};
+    this.state = { payload:{} };
     this.save = true;
-    this.invalidField = {name: '', status: false};
+    this.invalidField = { name: '', status: false };
   }
 
   handleChange(key, value){
     let obj = {};
     obj[key] = value;
-    console.log('obj:',obj);
     this.validate(obj);
   }
 
@@ -32,13 +30,10 @@ class RenderForm extends Component {
   }
 
   validate(arg){
-    // let save = true;
-    console.log('arg:',arg);
     if(arg.length <= 0)
       this.save = false;
-      // save = false;
 
-    if(arg['expertise'])
+    if(arg.expertise)
       arg.expertise = arg.expertise.toLowerCase();
 
     if(arg.email)
@@ -49,22 +44,31 @@ class RenderForm extends Component {
       }
       else{
         this.invalidField.status = false;
-        this.invalidField.name = 'email';
         this.save = true;
       }
 
-    this.setState({payload:{...this.state.payload, ...arg}});
+    if(arg.mobile){
+      if(arg.mobile.length < 10){
+        this.invalidField.status = true;
+        this.invalidField.name = 'mobile';
+        this.save = false;
+      }
+      else{
+        this.invalidField.status = false;
+        this.invalidField.name = 'mobile';
+        this.save = true;
+      }
+    }
+
+    this.setState({ payload:{ ...this.state.payload, ...arg } });
     return this.save;
-    // this.save = false;
   }
 
   saveForm(event){
     event.preventDefault();
 
-    if(this.validate(this.state.payload)){
-      console.log('payload:', this.state.payload);
+    if(this.validate(this.state.payload))
       this.props.saveForm(this.state.payload);
-    }
     else
       alert('Error in submitting the form');
   }
@@ -83,7 +87,7 @@ class RenderForm extends Component {
       for(let option in options){
         if(options[option] == value)
           checked = true;
-        tag.push(<span key={options[option]}><Input class="form-control radio-inline" type={type}  mapKey={key} placeHolder={`Enter ${key}`} value={options[option]} handleChange={this.handleChange} required={required} name={key} checked={checked}/>{options[option]}</span>);
+        tag.push(<span key={options[option]}><Input class="form-control radio-inline" type={type}  mapKey={key} value={options[option]} handleChange={this.handleChange} required={required} name={key} checked={checked}/>{options[option]}</span>);
       }
       return tag;
     case 'date':
@@ -127,8 +131,6 @@ class RenderForm extends Component {
   render(){
     if(!this.props.mapper)
       return null;
-    console.log('status current face', this.props.status);
-    // let toast = <Toast status={this.props.status} />;
     let toast = '';
     if(this.invalidField.status){
       toast = <Toast invalidField={this.invalidField.status} field={this.invalidField.name} status={this.props.status}/>;
@@ -152,7 +154,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 function mapStateToProps(state){
-  return {mapper: state.form.mapper, status: state.form.status};
+  return { mapper: state.form.mapper, status: state.form.status };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenderForm);

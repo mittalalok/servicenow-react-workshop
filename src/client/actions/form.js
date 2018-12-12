@@ -10,3 +10,10 @@ export function saveForm(payload){
     payload
   };
 }
+
+export function setCandidateStatus(payload){
+  return {
+    type: 'set_candidate_status',
+    payload
+  };
+}

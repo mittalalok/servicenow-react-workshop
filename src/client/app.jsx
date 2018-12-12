@@ -21,7 +21,7 @@ import UserProfile from './components/presentational/userProfile';
 import './sass/app.sass';
 
 import { formData } from './middlewares/form';
-import RenderForm from './components/container/renderForm';
+import RenderForm from './components/container/candidateSummary';
 
 import { initialState } from './constants';
 
