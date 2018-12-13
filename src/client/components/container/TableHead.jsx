@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
 import { isDefined } from '../../utils/helper';
 
-const sortedAsc = false; // TODO
-const sortedDesc = false; // TODO
+class TableHeader extends Component {
+    state = { showSearch: true }
 
-const TableHeader = ({ columnData, onSort, onSearch }) => {
-    return (
-        <thead>
-            <tr>
-                { columnData.map((col, i) => <HeaderLabel col={col} onSort={onSort} key={i}/>) }
-            </tr>
-            <tr>
-                { columnData.map((col, i) => <HeaderSearch col={col} onSearch={onSearch} key={i}/>) }
-            </tr>
-        </thead>
-    );
-};
+    toggleSearch = () => {
+        this.setState((prevState) => ({ showSearch: !prevState.showSearch }));
+    }
+
+    render() {
+        const { columnData, onSort, onSearch } = this.props;
+        return (
+            <thead>
+                <tr>
+                    { columnData.map((col, i) => <HeaderLabel col={col} onSort={onSort} key={i}/>) }
+                    <td>
+                        <button type="button" className="btn btn-default" aria-label="Right Align" onClick={this.toggleSearch}>
+                            <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <tr style={{display: this.state.showSearch ? 'table-row' : 'none'}}>
+                    { columnData.map((col, i) => <HeaderSearch col={col} onSearch={onSearch} key={i}/>) }
+                </tr>
+            </thead>
+        );
+    }
+}
 
 class HeaderSearch extends Component {
     onInputChange = (e) => {

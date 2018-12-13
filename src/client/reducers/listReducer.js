@@ -1,4 +1,5 @@
 import { listSchema } from '../utils/listSchema';
+import { getSortColumns } from '../utils/helper';
 
 export const listReducer = (state = 0, action) => {
     switch (action.type) {
@@ -13,18 +14,16 @@ export const listReducer = (state = 0, action) => {
 
 const fetchDataReducer = (state, action) => {
     let columnData = state.columnData.length === 0 ? [...listSchema[action.listType]] : state.columnData;
+    let sortColumns = getSortColumns(action.params);
 
-    let sortColumn = action.params['$sort'];
-    let sortOrder;
-    if (sortColumn) {
-        sortOrder = sortColumn[0] === '-' ? false : true;
-        sortColumn = sortColumn[0] === '-' ? sortColumn.slice(1) : sortColumn;
-    }
-    columnData = columnData.map(column => ({
-        ...column,
-        searchValue: action.params[column.id] !== undefined ? action.params[column.id]: column.searchValue,
-        sortOrder: sortColumn && column.id === sortColumn ? sortOrder : column.sortOrder
-    }));
+    columnData = columnData.map(column => {
+        let sortColumn = sortColumns.find((sortColumn) => sortColumn.col === column.id);
+        return {
+            ...column,
+            searchValue: action.params[column.id] !== undefined ? action.params[column.id]: '',
+            sortOrder: sortColumn ? sortColumn.asc : column.sortOrder
+        }
+    });
     return {
         ...state,
         data: action.data.data,

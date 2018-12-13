@@ -29,3 +29,14 @@ export const getSchemaName = (hash) => {
   //Add validation checks here
   return (hash.split('?')[0]).split('/')[2];
 };
+
+export const getSortColumns = (params) => {
+  return params.$sort ?
+    params.$sort
+      .split('%20')
+      .map((column) => ({
+        col: column[0] === '-' ? column.slice(1) : column,
+        asc: column[0] === '-' ? false : true
+      }))
+    : [];
+};
