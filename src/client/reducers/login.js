@@ -1,22 +1,8 @@
 import { EventTypes } from '../actions/login';
+import { initialState } from '../constants';
 
 
-const initialState = {
-  heading: 'Login',
-  users: [],
-  roles: [{ name: 'Candidate', id: 'Candidate' },
-    { name: 'Interviewer', id: 'Interviewer' },
-    { name: 'Manager', id: 'Manager' }],
-  selectedUser: null,
-  selectedRole: null,
-  currentHoveredUserIndex: 0,
-  requestingData: false,
-  loginButtonEnabled: false,
-  showDropdown: false
-};
-initialState.selectedRole = initialState.roles[0];
-
-export const loginReducer = (state = initialState, action) => {
+export const loginReducer = (state = initialState.login, action) => {
   let temp = '';
   switch (action.type) {
   case EventTypes.selectRole:

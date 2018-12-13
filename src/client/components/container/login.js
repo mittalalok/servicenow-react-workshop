@@ -37,7 +37,6 @@ const dispatchToProps = (dispatch, state) => {
       dispatch(selectedUser(entity));
     },
     handleDropDownHover: (ind) => {
-      console.log(ind);
       if (typeof(ind) !== 'undefined') {
         dispatch(hoveredUser(ind));
       }

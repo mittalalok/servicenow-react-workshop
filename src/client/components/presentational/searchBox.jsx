@@ -103,7 +103,7 @@ class SearchBox extends React.Component {
       } else {
         this.hoveredLi = new React.createRef();
         setTimeout(()=>{
-          if (!isElementInViewport(this.hoveredLi.current))
+          if (this.hoveredLi.current && !isElementInViewport(this.hoveredLi.current))
             this.hoveredLi.current.scrollIntoView(false);
         }, 5);
         dropdown = <div className="component-searchbox-dropdownlist">
