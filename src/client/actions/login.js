@@ -3,6 +3,7 @@ export const EventTypes = {
   requestingData: 'login:requesting_data',
   updateUserList: 'login:update_user_list',
   selectedUser: 'login:selected_user',
+  hoveredUser: 'login:hovered_user',
 };
 
 export function selectRole(index) {
@@ -37,5 +38,12 @@ export function selectedUser(data) {
   return {
     type: EventTypes.selectedUser,
     data: data
+  };
+}
+
+export function hoveredUser(ind) {
+  return {
+    type: EventTypes.hoveredUser,
+    index: ind
   };
 }

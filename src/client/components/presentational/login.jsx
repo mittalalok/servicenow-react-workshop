@@ -22,8 +22,10 @@ export default class Login extends React.PureComponent {
     loginButtonEnabled: PropTypes.bool.isRequired,
     showDropdown: PropTypes.bool.isRequired,
     requestingData: PropTypes.bool.isRequired,
+    currentHoveredUserIndex: PropTypes.number.isRequired,
+    handleDropDownHover: PropTypes.func.isRequired
   };
-  
+
   onChangeRole(e) {
     this.props.changeRole(e.target.selectedIndex);
   }
@@ -36,9 +38,11 @@ export default class Login extends React.PureComponent {
     e.preventDefault();
     this.props.loginSuccess();
   }
+  onUserHover() {}
 
   render() {
-    const { heading, roles, users, showDropdown, requestingData, onUserSelect } = this.props;
+    const { heading, roles, users, showDropdown, requestingData, onUserSelect,
+      handleDropDownHover, currentHoveredUserIndex } = this.props;
     const selectedValue = this.props.selectedUser ? this.props.selectedUser.name : '';
     return (
       <Modal isOpen={true}>
@@ -59,7 +63,8 @@ export default class Login extends React.PureComponent {
               <div className="col-sm-10">
                 <SearchBox onKeyDown={this.onUserChange.bind(this)} data={users}
                   isLoading={requestingData} showDropdown={showDropdown} onUserSelect={onUserSelect}
-                  selectedValue={selectedValue}/>
+                  selectedValue={selectedValue} currentHoveredUserIndex={currentHoveredUserIndex}
+                  onHover={this.onUserHover.bind(this)} handleDropDownHover={handleDropDownHover}/>
               </div>
             </div>
             <br/>

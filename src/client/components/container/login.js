@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Login from '../presentational/login';
-import { selectRole, requestingData, requestData, updateUserList, selectedUser } from '../../actions/login';
+import { selectRole, requestingData, requestData, updateUserList, selectedUser, hoveredUser } from '../../actions/login';
 import { push } from 'connected-react-router';
 
 
@@ -14,11 +14,12 @@ const stateToProps = (state) => {
     showDropdown: login.showDropdown,
     selectedRole: login.selectedRole,
     selectedUser: login.selectedUser,
-    loginButtonEnabled: login.loginButtonEnabled
+    loginButtonEnabled: login.loginButtonEnabled,
+    currentHoveredUserIndex: login.currentHoveredUserIndex
   };
 };
 
-const dispatchToProps = (dispatch) => {
+const dispatchToProps = (dispatch, state) => {
   return {
     loginSuccess: () => {
       dispatch(push('/main'));
@@ -34,6 +35,11 @@ const dispatchToProps = (dispatch) => {
     },
     onUserSelect: (entity) => {
       dispatch(selectedUser(entity));
+    },
+    handleDropDownHover: (ind) => {
+      if (typeof(ind) !== 'undefined') {
+        dispatch(hoveredUser(ind));
+      }
     }
   };
 };

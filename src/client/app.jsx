@@ -14,7 +14,7 @@ import HomeView from './components/presentational/home';
 import DashboardView from './components/presentational/dashboard';
 import NavLinks from './components/presentational/navLinks';
 import NavBar from './components/presentational/navBar';
-import MainView from './components/presentational/main';
+import MainView from './components/container/main';
 import Login from './components/container/login';
 import UserProfile from './components/presentational/userProfile';
 
