@@ -44,24 +44,22 @@ export default class App extends PureComponent {
     const state = store.getState();
     return <Provider store={store}>
       <RouterComponent router={router}>
-        <div>
+        <div className="container">
           <NavBar brandName={state.appName}>
             <NavLinks store={store} data={state.navLinks}/>
             <span className="pull-right"><UserProfile store={store}/></span>
           </NavBar>
-          <div className="main-container container">
-            <div>
-              <Switch>
-                <Route path="/lists/:listType" component={ListsViewContainer} />
-                <Route path="/lists" component={AllLists} />
-                <Route path="/login" component={Login} />
-                <Route path="/main" component={MainView} />
-                <Route path="/dashboard" render={() => (<DashboardView/>)} />
-                <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
-                <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
-                <Route render={() => (<HomeView/>)}/>
-              </Switch>
-            </div>
+          <div className="main-container">
+            <Switch>
+              <Route path="/lists/:listType" component={ListsViewContainer} />
+              <Route path="/lists" component={AllLists} />
+              <Route path="/login" component={Login} />
+              <Route path="/main" component={MainView} />
+              <Route path="/dashboard" render={() => (<DashboardView/>)} />
+              <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
+              <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
+              <Route render={() => (<HomeView/>)}/>
+            </Switch>
           </div>
         </div>
       </RouterComponent>

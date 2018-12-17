@@ -1,0 +1,20 @@
+table
+  word-break: break-word
+  thead
+    tr
+      th
+        a
+          cursor: pointer
+        i.glyphicon
+          margin-left: $spacing-small
+  tfoot
+    .form-inline
+      text-align: center
+      .input-group
+        margin-right: $spacing-medium
+      .btn
+        margin-right: $spacing-medium
+  &.table-action
+    tr
+      td:last-child, th:last-child
+        width: 3*$spacing-large + $spacing-standard

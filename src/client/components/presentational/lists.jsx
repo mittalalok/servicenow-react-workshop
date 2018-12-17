@@ -3,11 +3,13 @@ import TableHeader from '../container/TableHead';
 import { TableBody } from './TableBody';
 import TableFooter from '../container/TableFooter';
 
-export const Lists = ({ lists, listType, onSearch, onSort, onEdit }) => {
-    
+export const Lists = ({ lists, listType, onSearch, onSort, onEdit, onDelete, onDetail, showActions=true }) => {
+    let tableClass = "table table-striped";
+    if(showActions)
+      tableClass += " table-action";
     return (
         <div>
-            <table className="list-table">
+            <table className={tableClass}>
                 <TableHeader
                     columnData={lists.columnData}
                     onSearch={onSearch}
@@ -17,10 +19,12 @@ export const Lists = ({ lists, listType, onSearch, onSort, onEdit }) => {
                     data={lists.data}
                     columnData={lists.columnData}
                     onEdit = {onEdit}
+                    onDelete = {onDelete}
+                    onDetail = {onDetail}
+                    showActions = {showActions}
                 />
-            </table>
-            <table className="list-table">
                 <TableFooter 
+                    colCount={lists.columnData.length+showActions}
                     currentFrom={lists.skip ? lists.skip + 1 : '1'}  
                     currentTo={lists.limit ? lists.skip + lists.limit : '20'}  
                     skip={lists.skip ? lists.skip : '0'}
