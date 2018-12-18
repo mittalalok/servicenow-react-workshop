@@ -28,15 +28,20 @@
   li:hover, li.active
     background-color: #dad1e4
 
+.loader-container
+	min-height: 32px
+
+.loader
+	border: 4px solid #f3f3f3
+	border-top: 4px solid #6839a6
+	border-radius: 50%
+	width: 32px
+	height: 32px
+	animation: spin-searchbox-dropdown 1s linear infinite
+	position: absolute
+	right: 50%
+
 .component-searchbox-dropdownlist
-	.loader-container
-		min-height: 32px
-	.loader
-		border: 4px solid #f3f3f3
-		border-top: 4px solid #6839a6
-		border-radius: 50%
-		width: 32px
-		height: 32px
-		animation: spin-searchbox-dropdown 1s linear infinite
-		position: absolute
-		right: 50%
+  .loader
+    width: 32px
+    height: 32px
