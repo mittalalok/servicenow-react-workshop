@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { dottify } from '../../../utils/string';
 import SearchBox from '../searchDropDown/index';
 import EventForm from './event/index';
-import { requestData, requestById, searchEvent, updateEventList, hoveredEvent, selectedEvent, createNewEvent } from '../../../actions/manager';
+import { requestData, searchEvent, cancelEvent, updateEventList, hoveredEvent, selectedEvent, createNewEvent } from '../../../actions/manager';
 
 import { connect } from 'react-redux';
 const stateToProps = (state) => {
@@ -19,7 +19,7 @@ const stateToProps = (state) => {
   };
 };
 
-const dispatchToProps = (dispatch, state) => {
+const dispatchToProps = (dispatch) => {
   return {
     searchEventHandler: (val) => {
       if (!val) {
@@ -42,28 +42,24 @@ const dispatchToProps = (dispatch, state) => {
     onCreateEvent: () => {
       dispatch(createNewEvent());
     },
-    getData: (params, cb) => {
-      dispatch(requestById('requirements', params.id, cb));
+    onCancelEvent: () => {
+      dispatch(cancelEvent());
     }
   };
 };
-
-const MAX = 50;
-const dottify = (str) => {
-  if (str.length <= MAX) return str;
-  else return str.substring(0, MAX-3) + '...';
-};
-
 
 class MainView extends React.PureComponent {
   static propTypes = {
     searchEventHandler: PropTypes.func.isRequired,
     onEventSelected: PropTypes.func.isRequired,
+    onCreateEvent: PropTypes.func.isRequired,
+    onCancelEvent: PropTypes.func.isRequired,
     eventSearchBoxIsLoading: PropTypes.bool.isRequired,
     isEventNew: PropTypes.bool.isRequired,
     selectedEvent: PropTypes.any,
     eventList: PropTypes.arrayOf(Object)
   };
+
 
   render() {
     return (<div className="">
@@ -83,8 +79,8 @@ class MainView extends React.PureComponent {
         </div>
       </form>
       <hr/>
-      { this.props.selectedEvent && <EventForm model={this.props.selectedEvent} dataService={this.props.getData.bind(this)}/> }
-      { this.props.isEventNew && <EventForm dataService={this.props.getData.bind(this)}/> }
+      { this.props.selectedEvent && <EventForm model={this.props.selectedEvent} onCancel={this.props.onCancelEvent.bind(this)}/> }
+      { this.props.isEventNew && <EventForm onCancel={this.props.onCancelEvent.bind(this)}/> }
     </div>);
   }
 }

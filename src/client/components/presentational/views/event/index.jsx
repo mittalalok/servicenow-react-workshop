@@ -6,6 +6,8 @@ import SearchBox from '../../searchDropDown/index';
 import { fetchData } from '../../../../middlewares/rest';
 import EventService from '../../../../services/models/events';
 
+import logger from '../../../../services/logger';
+
 function createStateFromModel(state, model) {
   if (model) {
     state.modelId = model._id;
@@ -34,15 +36,20 @@ function createStateFromModel(state, model) {
     state.modelHiringManager = '';
     state.modelHrContact = '';
     state.isNewRecord = true;
-    state.isFetching = false;
   }
+  state.isFetching = false;
+  state.isDirty = false;
 }
 
 
 
 export default class EventForm extends React.Component {
   static propTypes = {
-    model: PropTypes.any
+    model: PropTypes.any,
+    onCancel: PropTypes.func.isRequired
+  };
+  static defaultProps = {
+    onCancel: () => {}
   };
 
   constructor(props) {
@@ -58,8 +65,10 @@ export default class EventForm extends React.Component {
   }
 
   fetchDetailedModelAndPopulateState(id) {
-    this.props.dataService({ id: id }, (d) => {
-      console.log(d);
+    let dataService = new EventService();
+    dataService.getById(id).then((res) => {
+      let d = res.data;
+
       this.setState({
         modelId: d._id,
         modelTitle: d.description,
@@ -73,10 +82,20 @@ export default class EventForm extends React.Component {
         modelHiringManager: d.manager ? d.manager : '',
         modelHrContact: d.hr_contact ? d.hr_contact : '',
         isNewRecord: false,
-        isFetching: false
+        isFetching: false,
+        isDirty: false
       });
-    });
+    }, logger.error);
   }
+
+  componentDidUpdate(){
+    if (this.props.model) {
+      if (this.props.model._id !== this.state.modelId) {
+        this.fetchDetailedModelAndPopulateState(this.props.model._id);
+      }
+    }
+  }
+
 
   componentDidMount() {
     if(this.props.model) {
@@ -84,15 +103,15 @@ export default class EventForm extends React.Component {
     }
   }
 
-  statusChangeHandler(e) { this.setState({ modelStatus: e.target.checked ? 'on' : 'off' }); }
-  titleChangeHandler(e) { this.setState({ modelTitle: e.target.value }); }
-  descChangeHandler(e) { this.setState({ modelDescription: e.target.value }); }
-  vacancyChangeHandler(e) { this.setState({ modelVacancies: e.target.value }); }
-  minExpChangeHandler(e) { this.setState({ modelMinExperience: e.target.value }); }
-  maxExpChangeHandler(e) { this.setState({ modelMaxExperience: e.target.value }); }
-  businessUnitChangeHandler(d) { this.setState({ modelBusinessUnit: d.value }); }
-  hiringManagerChangeHandler(d) { this.setState({ modelHiringManager: d }); }
-  hrContactChangeHandler(d) { this.setState({ modelHrContact: d }); }
+  statusChangeHandler(e) { this.setState({ modelStatus: e.target.checked ? 'on' : 'off', isDirty: true }); }
+  titleChangeHandler(e) { this.setState({ modelTitle: e.target.value, isDirty: true }); }
+  descChangeHandler(e) { this.setState({ modelDescription: e.target.value, isDirty: true }); }
+  vacancyChangeHandler(e) { this.setState({ modelVacancies: e.target.value, isDirty: true }); }
+  minExpChangeHandler(e) { this.setState({ modelMinExperience: e.target.value, isDirty: true }); }
+  maxExpChangeHandler(e) { this.setState({ modelMaxExperience: e.target.value, isDirty: true }); }
+  businessUnitChangeHandler(d) { this.setState({ modelBusinessUnit: d.value, isDirty: true }); }
+  hiringManagerChangeHandler(d) { this.setState({ modelHiringManager: d, isDirty: true }); }
+  hrContactChangeHandler(d) { this.setState({ modelHrContact: d, isDirty: true }); }
 
 
   searchBusinessUnit(val) {
@@ -154,22 +173,18 @@ export default class EventForm extends React.Component {
 
 
     if (this.state.isNewRecord) {
-      console.log('Creating....');
       evtService.create(data).then((d) => {
-        console.log(d);
         this.setState({ isSaving: false });
         this.fetchDetailedModelAndPopulateState(d.data._id);
       }, (e) => {
-        console.error(e);
+        logger.error(e);
         this.setState({ isSaving: false });
       });
     } else {
-      evtService.update(this.state.modelId, data).then((d) => {
-        console.log(d);
+      evtService.update(this.state.modelId, data).then(() => {
         this.setState({ isSaving: false });
-        // this.fetchDetailedModelAndPopulateState(d.data._id);
       }, (e) => {
-        console.error(e);
+        logger.error(e);
         this.setState({ isSaving: false });
       });
     }
@@ -180,7 +195,6 @@ export default class EventForm extends React.Component {
   render() {
     if (this.state.isFetching) return <div className="loader-container"><div className="loader"></div></div>;
 
-
     let formHasErrors = false;
     let titleHasErrors = this.state.modelTitle.length <= 3;
     let descriptionHasErrors = this.state.modelDescription.length <= 3;
@@ -188,6 +202,7 @@ export default class EventForm extends React.Component {
     try {
       let n = parseInt(this.state.modelVacancies);
       vacancyHasErrors = (n < 1);
+      if (this.state.modelVacancies.length === 0) vacancyHasErrors = true;
     } catch(e) {
       vacancyHasErrors = true;
     }
@@ -196,6 +211,7 @@ export default class EventForm extends React.Component {
     try {
       let n = parseInt(this.state.modelMinExperience);
       minExperienceHasErrors = (n < 0);
+      if (this.state.modelMinExperience.length === 0) minExperienceHasErrors = true;
     } catch(e) {
       minExperienceHasErrors = true;
     }
@@ -204,9 +220,24 @@ export default class EventForm extends React.Component {
     try {
       let n = parseInt(this.state.modelMaxExperience, 10);
       maxExperienceHasErrors = (n < 0 || n > 480);
+      if (this.state.modelMaxExperience.length === 0) maxExperienceHasErrors = true;
     } catch(e) {
       maxExperienceHasErrors = true;
     }
+    if (!minExperienceHasErrors && !maxExperienceHasErrors) {
+      try {
+        let min = parseInt(this.state.modelMinExperience);
+        let max = parseInt(this.state.modelMaxExperience);
+        if (min > max) {
+          minExperienceHasErrors = true;
+          maxExperienceHasErrors = true;
+        }
+      }catch(e) {
+        minExperienceHasErrors = true;
+        maxExperienceHasErrors = true;
+      }
+    }
+
 
     let businessUnitHasErrors = (this.state.modelBusinessUnit.length === 0);
 
@@ -263,7 +294,7 @@ export default class EventForm extends React.Component {
               </label>
               <div className="col-sm-6">
                 <input type="number" min="0" className="form-control" id="event-input-min-experience" value={this.state.modelMinExperience} onChange={this.minExpChangeHandler.bind(this)}/>
-                {minExperienceHasErrors && <span className="help-block">The minimum experience should be 0 or more.</span>}
+                {minExperienceHasErrors && <span className="help-block">The minimum experience should be 0 or more and must be less than or equal to max experience.</span>}
               </div>
             </div>
             <div className={'form-group' + (maxExperienceHasErrors ? ' has-error': '')}>
@@ -272,7 +303,7 @@ export default class EventForm extends React.Component {
               </label>
               <div className="col-sm-6">
                 <input type="number" min="0" className="form-control" id="event-input-max-experience" value={this.state.modelMaxExperience} onChange={this.maxExpChangeHandler.bind(this)}/>
-                {maxExperienceHasErrors && <span className="help-block">The maximum experience should be between 0 and 480.</span>}
+                {maxExperienceHasErrors && <span className="help-block">The maximum experience should be between 0 and 480 and must be more than or equal to min experience.</span>}
               </div>
             </div>
             <div className={'form-group has-feedback'+ (businessUnitHasErrors?' has-error': '')}>
@@ -337,11 +368,11 @@ export default class EventForm extends React.Component {
       <form>
         <div className="form-group">
           <div className="col-sm-offset-8 col-sm-2">
-            <button className="btn btn-default">Cancel</button>
+            <button onClick={this.props.onCancel} className="btn btn-default">Cancel</button>
           </div>
           <div className="col-sm-2">
             {this.state.isSaving && <div className="loader-container"><div className="loader"></div></div>}
-            {!this.state.isSaving && <button type="submit" className="btn btn-primary" onClick={this.saveHandler.bind(this)} disabled={!formHasErrors ? '' : 'disabled'}>Save</button>}
+            {!this.state.isSaving && <button type="submit" className="btn btn-primary" onClick={this.saveHandler.bind(this)} disabled={(!formHasErrors && this.state.isDirty) ? '' : 'disabled'}>Save</button>}
           </div>
         </div>
       </form>

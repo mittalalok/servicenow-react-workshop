@@ -5,7 +5,8 @@ export const EventTypes = {
   updateEventList: 'mgr-view-update-event-list',
   hoveredEvent: 'mgr-view-hovered-event',
   selectedEvent: 'mgr-view-selected-event',
-  createNewEvent: 'mgr-view-create-new-event'
+  createNewEvent: 'mgr-view-create-new-event',
+  cancelEvent: 'mgr-view-cancel-event'
 };
 
 export const requestData = (schema, key, value, cb) => {
@@ -15,17 +16,6 @@ export const requestData = (schema, key, value, cb) => {
       schema,
       key,
       search: value
-    },
-    callBackHandler: cb
-  };
-};
-
-export const requestById = (schema, id, cb) => {
-  return {
-    type: EventTypes.apiGetById,
-    params: {
-      schema,
-      id
     },
     callBackHandler: cb
   };
@@ -62,5 +52,11 @@ export const createNewEvent = (data) => {
   return {
     type: EventTypes.createNewEvent,
     data
+  };
+};
+
+export const cancelEvent = () => {
+  return {
+    type: EventTypes.cancelEvent
   };
 };

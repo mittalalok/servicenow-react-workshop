@@ -22,6 +22,8 @@ export const mainReducer = (state = initialState, action) => {
     return Object.assign(state, { selectedEvent: action.data, showEventSearchDropDown: false, isEventNew: false });
   case EventTypes.createNewEvent:
     return Object.assign(state, { selectedEvent: null, isEventNew: true, showEventSearchDropDown: false });
+  case EventTypes.cancelEvent:
+    return Object.assign(state, { selectedEvent: null, isEventNew: false, showEventSearchDropDown: false });
   default:
     return state;
   }

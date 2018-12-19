@@ -42,6 +42,12 @@ class SearchDropDown extends React.Component {
     }, 100);
   }
 
+  componentDidUpdate(){
+    if(this.props.textValue !== this.state.textValue && this.props.textValue) {
+      this.setState({ textValue: this.props.textValue });
+    }
+  }
+
   textChangeHandler(e) {
     this.setState({
       textValue: e.target.value,
