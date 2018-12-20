@@ -5,6 +5,9 @@ import HorizontalRule from '../presentational/forms/horizontalRule';
 import Modal from '../presentational/modal/index.jsx';
 import { connect } from 'react-redux';
 import CandidateStatus from '../forms/candidateStatus.jsx';
+import { saveForm } from '../../actions/form';
+import ScheduleNextRound from './schedule_next_round';
+import { scheduleNextRound } from '../../actions/form';
 
 class CandidateSummary extends Component {
 
@@ -34,30 +37,49 @@ class CandidateSummary extends Component {
       return <span>{value}</span>;
     default:
       return <span>{value}</span>;
-
     }
   }
 
   showSummary(){
     this.setState({ showSummary: !this.state.showSummary });
   }
-  updateStatus(){
-    console.log(this.state);
+
+  setModalState(arg){
+    this.setState({ modalOpen: !this.state.modalOpen });
+    if(arg == 'updateStatus'){
+      this.updateStatusModal();
+    } else {
+      this.schedule_next_round();
+    }
+  }
+
+  updateStatus(arg){
+    if(arg == 'updateStatus'){
+      let candidateStatus = this.props.form.candidateStatus;
+      if(candidateStatus){
+        this.props.saveForm(candidateStatus);
+      }
+    }
+    else{
+      let round = { interview: this.props.form.selectedUser, date: this.props.form.nextRoundDate };
+      this.props.scheduleNextRound(round);
+    }
     this.setModalState();
   }
-  displayModal(){
+
+  updateStatusModal(){
     this.modal = <Modal isOpen={this.state.modalOpen}>
       <CandidateStatus state={this.state}/>
-      <button onClick={() => this.updateStatus()} className="btn btn-primary" >Submit</button>
+      <button onClick={() => this.updateStatus('updateStatus')} className="btn btn-primary" >Submit</button>
     </Modal>;
   }
-  setModalState(){
-    this.setState({ modalOpen: !this.state.modalOpen });
-    this.displayModal();
-  }
+
   schedule_next_round(){
-    alert('schedule_next_round');
-    // this.setState({ status: this.state.status });
+    this.modal = <Modal isOpen={this.state.modalOpen}>
+      <ScheduleNextRound />
+      <button className="btn btn-primary" onClick={() => this.updateStatus()} >Schedule Round</button>
+      <span></span>
+    </Modal>;
   }
 
   getTag(obj, key) {
@@ -111,8 +133,8 @@ class CandidateSummary extends Component {
     }
     return <form>{result}
       <button onClick={() => this.showSummary()} className="btn btn-primary" >{summary}</button>
-      <button onClick={() => this.setModalState()} className="btn btn-primary" >Update Status</button>
-      <button onClick={() => this.schedule_next_round()} className="btn btn-primary" >Schedule Next Round</button>
+      <button onClick={() => this.setModalState('updateStatus')} className="btn btn-primary" >Update Status</button>
+      <button onClick={() => this.setModalState('scheduleNextRoundModal')} className="btn btn-primary" >Schedule Next Round</button>
     </form>;
   }
   render(){
@@ -126,13 +148,21 @@ class CandidateSummary extends Component {
 CandidateSummary.propTypes = {
   mapper: PropTypes.object,
   displaySummary: PropTypes.bool,
-  status: PropTypes.number
+  status: PropTypes.number,
+  saveForm: PropTypes.func,
+  form: PropTypes.object,
+  scheduleNextRound: PropTypes.func
 };
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = (dispatch) => ({
+  saveForm: payload => dispatch(saveForm(payload)),
+  scheduleNextRound: (data) => {
+    dispatch(scheduleNextRound(data));
+  }
+});
 
 function mapStateToProps(state){
-  return { mapper: state.form.mapper, status: state.form.status };
+  return { mapper: state.form.mapper, status: state.form.status, form: state.form };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CandidateSummary);

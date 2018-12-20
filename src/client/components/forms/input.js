@@ -18,7 +18,9 @@ class Input extends Component {
     this.props.handleChange(this.props.mapKey, event.target.value);
   }
   render(){
-    return <input className = {this.props.class}  type = {this.props.type} id = {this.props.mapKey} placeholder = {this.props.placeHolder} onChange = {this.handleChange} value = {this.state.value || ''} required={this.props.required} minLength={this.props.min} maxLength={this.props.max} accept={this.props.accept} name={this.props.name} checked={this.props.checked} readOnly={this.props.readonly} disabled={this.props.disabled} style={this.props.readonly || this.props.disabled ? readOnlyText : null}/>;
+    return <input className = {this.props.class}  type = {this.props.type} id = {this.props.mapKey} placeholder = {this.props.placeHolder}
+      onChange = {this.handleChange} value = {this.state.value || ''} required={this.props.required} minLength={this.props.min} maxLength={this.props.max} accept={this.props.accept} name={this.props.name} checked={this.props.checked}
+      readOnly={this.props.readonly} disabled={this.props.disabled} style={this.props.readonly || this.props.disabled ? readOnlyText : null} />;
   }
 }
 
