@@ -134,7 +134,7 @@ class SearchDropDown extends React.Component {
   }
 
   render() {
-    return <div onClick={(e) => {e.stopPropagation();}}>
+    return <div className="component-searchbox" onClick={(e) => {e.stopPropagation();}}>
       <TextBox
         isDisabled={this.props.isDisabled}
         onChange={this.textChangeHandler.bind(this)}
