@@ -3,8 +3,10 @@ import RestService from '../rest';
 
 export default class BaseModel {
   constructor(modelName) {
+    this.serverUrl = SERVER_URL;
     this.modelName = modelName;
-    this.service = new RestService(`${SERVER_URL}${this.modelName}`);
+    this.baseUrl = `${SERVER_URL}${this.modelName}`;
+    this.service = new RestService(this.baseUrl);
   }
 
   getById(id) {
@@ -17,5 +19,21 @@ export default class BaseModel {
 
   create(data) {
     return this.service.post(data);
+  }
+
+  get(params) {
+    if (typeof(params) === 'string') {
+      return this.service.getByUrl(params);
+    } else {
+      let url = this.baseUrl + '?';
+      let keys = Object.keys(params);
+      keys.forEach((k, i) => {
+        url += k + '=' + params[k];
+        if(i < keys.length - 1) {
+          url += '&';
+        }
+      });
+      return this.service.getByUrl(url);
+    }
   }
 }

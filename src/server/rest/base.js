@@ -39,7 +39,10 @@ class BaseRestAPI {
         let logger = this.config.logger;
         let controller = this.routeConfig.controller;
         let queryObj = controller.parseQuery(req.query);
-        controller.query(queryObj.query, queryObj.limit, queryObj.skip)
+        let options = {
+            populate: req.query.$populate ? (req.query.$populate === 'true') : false
+        };
+        controller.query(queryObj.query, queryObj.limit, queryObj.skip, options)
             .then((d)=>{
                 res.json(d);
             }, (e) => {

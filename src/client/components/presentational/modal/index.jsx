@@ -69,6 +69,7 @@ class Modal extends React.Component {
         </div>
       </div>;
     }
+    this.node = document.getElementById('modal-container');
     if (!this.node) {
       this.node = createHTMLElement('div', 'modal-container');
       document.body.appendChild(this.node);

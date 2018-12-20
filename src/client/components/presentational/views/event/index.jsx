@@ -5,6 +5,8 @@ import Switch from '../../forms/switch';
 import SearchBox from '../../searchDropDown/index';
 import { fetchData } from '../../../../middlewares/rest';
 import EventService from '../../../../services/models/events';
+import TagList from './tagList';
+import AddSkillsModal from './AddSkillsModal';
 
 import logger from '../../../../services/logger';
 
@@ -83,7 +85,8 @@ export default class EventForm extends React.Component {
         modelHrContact: d.hr_contact ? d.hr_contact : '',
         isNewRecord: false,
         isFetching: false,
-        isDirty: false
+        isDirty: false,
+        showAddSkillsModal: false
       });
     }, logger.error);
   }
@@ -112,7 +115,21 @@ export default class EventForm extends React.Component {
   businessUnitChangeHandler(d) { this.setState({ modelBusinessUnit: d.value, isDirty: true }); }
   hiringManagerChangeHandler(d) { this.setState({ modelHiringManager: d, isDirty: true }); }
   hrContactChangeHandler(d) { this.setState({ modelHrContact: d, isDirty: true }); }
+  skillsChangeHandler(removed, remaining) {
+    this.setState({ modelSkills: remaining.map((d) => d.name), isDirty: true });
+  }
+  skillsAddedHandler(added) {
+    let arr = this.state.modelSkills.slice(0, this.state.modelSkills.length);
+    added.forEach((a)=>{
+      if(arr.indexOf(a.value) === -1) arr.push(a.value);
+    });
+    this.setState({ modelSkills: arr, isDirty: true, showAddSkillsModal: false });
+  }
 
+
+  handleSkillsModalClose() {
+    this.setState({ showAddSkillsModal: false });
+  }
 
   searchBusinessUnit(val) {
     this.setState({ modelBusinessUnit: '' });
@@ -261,16 +278,15 @@ export default class EventForm extends React.Component {
               </div>
               {descriptionHasErrors && <span className="help-block">A description must be provided and should be more than 3 characters.</span>}
             </div>
-            <div className="form-group">
-              <label htmlFor="event-input-status" className="control-label">
-                Status
-              </label>
-              <div><Switch onChange={this.statusChangeHandler.bind(this)} isDisabled={this.state.isNewRecord} isChecked={this.state.modelStatus === 'on'}/></div>
-            </div>
+
             <div className="form-group">
               <label className="control-label">Skills</label>
               <div>
-                TODO
+                <TagList
+                  data={this.state.modelSkills.map((s) => {return { id: s, name: s };})}
+                  onClick={this.skillsChangeHandler.bind(this)}
+                />
+                <button className="btn btn-xs btn-default" onClick={()=>{this.setState({ showAddSkillsModal: true });}}>Add more skills..</button>
               </div>
             </div>
           </form>
@@ -353,7 +369,7 @@ export default class EventForm extends React.Component {
             </div>
             <div className="form-group">
               <div className="col-sm-offset-6 col-sm-6" style={{ textAlign: 'left' }}>
-                <a className='btn btn-default' href="javascript:void()"
+                <a className='btn btn-default' href={`#/events/${this.state.modelId}/candidates`}
                   disabled={this.state.isNewRecord ? 'disable': ''}>
                   Manage Selections
                   &nbsp;
@@ -376,6 +392,7 @@ export default class EventForm extends React.Component {
           </div>
         </div>
       </form>
+      {this.state.showAddSkillsModal && <AddSkillsModal onClose={this.handleSkillsModalClose.bind(this)} onDone={this.skillsAddedHandler.bind(this)}/>}
     </div>;
   }
 }

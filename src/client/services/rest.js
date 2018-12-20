@@ -23,4 +23,8 @@ export default class Service {
     return axios.delete(`${this.baseUrl}/${id}`);
   }
 
+  getByUrl(url) {
+    return axios.get(url);
+  }
+
 }

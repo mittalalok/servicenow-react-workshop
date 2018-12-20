@@ -1,5 +1,6 @@
 const MAX_LIMIT = 100;
 const SchemaTypes = require('mongoose').Schema.Types;
+const ObjectId = require('mongoose').Types.ObjectId;
 
 class BaseController {
     constructor(Model) {
@@ -15,8 +16,9 @@ class BaseController {
         return this.Model.insertMany(data);
     }
 
-    read(query = {}) {
-        return this.Model.find(query);
+    read(query = {}, options = null) {
+        let qry = this.Model.find(query);
+        return qry;
     }
 
     readById(id, options) {
@@ -67,8 +69,13 @@ class BaseController {
         return m.save();
     }
 
-    query(query, limit=MAX_LIMIT, skip=0) {
+    query(query, limit=MAX_LIMIT, skip=0, options = null) {
         let qd = this.Model.find().merge(query);
+        if (options && options.populate) {
+          this._fieldsToPopulate.forEach((f) => {
+            qd.populate({ path: f });
+          });
+        }
         let qc = this.Model.find().merge(query);
 
         return new Promise((resolve, reject) => {
@@ -93,7 +100,11 @@ class BaseController {
         });
     }
 
-
+    addQueryForObjectIdField(key, value, query) {
+      let obj = {};
+      obj[key] = new ObjectId(value);
+      query.where(obj);
+    }
 
     addQueryForStringField(key, value, query) {
         query.regex(key, new RegExp(value, 'i'));
@@ -166,7 +177,10 @@ class BaseController {
             logger.info('key: %s, value: %s', key, value);
             let type = schema.path(key);
             if (type) {
-                if(type instanceof SchemaTypes.String) {
+                if (type instanceof SchemaTypes.ObjectId) {
+                  self.addQueryForObjectIdField(key, value, query);
+                }
+                else if(type instanceof SchemaTypes.String) {
                     self.addQueryForStringField(key, value, query);
                 } if(type instanceof SchemaTypes.Number) {
                     self.addQueryForNumberField(key, value, query);

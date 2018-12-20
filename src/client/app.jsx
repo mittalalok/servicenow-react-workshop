@@ -17,6 +17,7 @@ import NavBar from './components/presentational/navBar';
 import MainView from './components/container/main';
 import Login from './components/container/login';
 import UserProfile from './components/presentational/userProfile';
+import EventCandidates from './components/presentational/views/event/candidates';
 
 import './sass/app.sass';
 
@@ -58,6 +59,7 @@ export default class App extends PureComponent {
               <Route path="/dashboard" render={() => (<DashboardView/>)} />
               <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
               <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
+              <Route path="/events/:id/candidates" render={()=>(<EventCandidates/>)} />
               <Route render={() => (<HomeView/>)}/>
             </Switch>
           </div>
