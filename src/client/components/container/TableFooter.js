@@ -63,6 +63,7 @@ class TableFooterComponent extends Component {
             currentFrom={this.props.currentFrom}
             totalRecords={this.props.totalRecords}
             currentTo={this.props.currentTo}
+            colCount={this.props.colCount}
         />;
     }       
 }

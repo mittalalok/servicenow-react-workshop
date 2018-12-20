@@ -17,11 +17,12 @@ import NavBar from './components/presentational/navBar';
 import MainView from './components/container/main';
 import Login from './components/container/login';
 import UserProfile from './components/presentational/userProfile';
+import EventCandidates from './components/presentational/views/event/candidates';
 
 import './sass/app.sass';
 
 import { formData } from './middlewares/form';
-import RenderForm from './components/container/candidateSummary';
+import RenderForm from './components/container/renderForm';
 
 import { initialState } from './constants';
 
@@ -44,25 +45,23 @@ export default class App extends PureComponent {
     const state = store.getState();
     return <Provider store={store}>
       <RouterComponent router={router}>
-        <div>
+        <div className="container">
           <NavBar brandName={state.appName}>
             <NavLinks store={store} data={state.navLinks}/>
             <span className="pull-right"><UserProfile store={store}/></span>
           </NavBar>
-          <div className="main-container container">
-            <div>
-              <Switch>
-                <Route path="/lists/:listType" component={ListsViewContainer} />
-                <Route path="/lists" component={AllLists} />
-                <Route path="/login" component={Login} />
-                <Route path="/main" component={MainView} />
-                <Route path="/dashboard" render={() => (<DashboardView/>)} />
-                <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
-                <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
-                <Route render={() => (<HomeView/>)}/>
-
-              </Switch>
-            </div>
+          <div className="main-container">
+            <Switch>
+              <Route path="/lists/:listType" component={ListsViewContainer} />
+              <Route path="/lists" component={AllLists} />
+              <Route path="/login" component={Login} />
+              <Route path="/main" component={MainView} />
+              <Route path="/dashboard" render={() => (<DashboardView/>)} />
+              <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
+              <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
+              <Route path="/events/:id/candidates" render={()=>(<EventCandidates/>)} />
+              <Route render={() => (<HomeView/>)}/>
+            </Switch>
           </div>
         </div>
       </RouterComponent>

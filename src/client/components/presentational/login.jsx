@@ -1,12 +1,14 @@
 import React from 'react';
 import Modal from './modal/index';
-import SearchBox from './searchBox';
+import SearchBox from './searchDropDown/index';
 import PropTypes from 'prop-types';
 
 const NamedObjectType = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired
 });
+
+
 
 export default class Login extends React.PureComponent {
   static propTypes = {
@@ -20,10 +22,7 @@ export default class Login extends React.PureComponent {
     onUserSelect: PropTypes.func,
     loginSuccess: PropTypes.func.isRequired,
     loginButtonEnabled: PropTypes.bool.isRequired,
-    showDropdown: PropTypes.bool.isRequired,
     requestingData: PropTypes.bool.isRequired,
-    currentHoveredUserIndex: PropTypes.number.isRequired,
-    handleDropDownHover: PropTypes.func.isRequired
   };
 
   onChangeRole(e) {
@@ -38,12 +37,9 @@ export default class Login extends React.PureComponent {
     e.preventDefault();
     this.props.loginSuccess();
   }
-  onUserHover() {}
 
   render() {
-    const { heading, roles, users, showDropdown, requestingData, onUserSelect,
-      handleDropDownHover, currentHoveredUserIndex } = this.props;
-    const selectedValue = this.props.selectedUser ? this.props.selectedUser.name : '';
+    const { heading, roles, users } = this.props;
     return (
       <Modal isOpen={true}>
         <h1> {heading} </h1>
@@ -53,18 +49,19 @@ export default class Login extends React.PureComponent {
             <div className="form-group">
               <label htmlFor="inputRole" className="col-sm-2 control-label">Role</label>
               <div className="col-sm-10">
-                <select id="inputRole" className="form-control" onChange={this.onChangeRole.bind(this)}>
-                  { roles.map((r) => <option key={r.id}>{ r.name }</option>) }
+                <select id="inputRole" className="form-control" onChange={this.onChangeRole.bind(this)} value={this.props.selectedRole ? this.props.selectedRole.id : ''}>
+                  { roles.map((r) => <option key={r.id} value={r.id}>{ r.name }</option>) }
                 </select>
               </div>
             </div>
             <div className="form-group has-feedback">
               <label htmlFor="inputUser" className="col-sm-2 control-label">User</label>
               <div className="col-sm-10">
-                <SearchBox onKeyDown={this.onUserChange.bind(this)} data={users}
-                  isLoading={requestingData} showDropdown={showDropdown} onUserSelect={onUserSelect}
-                  selectedValue={selectedValue} currentHoveredUserIndex={currentHoveredUserIndex}
-                  onHover={this.onUserHover.bind(this)} handleDropDownHover={handleDropDownHover}/>
+                <SearchBox
+                  onSearch={this.onUserChange.bind(this)}
+                  onSelect={this.props.onUserSelect.bind(this)}
+                  isSearching={this.props.requestingData}
+                  data={users}/>
               </div>
             </div>
             <br/>

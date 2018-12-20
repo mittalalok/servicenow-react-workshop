@@ -9,17 +9,15 @@ const stateToProps = (state) => {
   return {
     heading: login.heading,
     roles: login.roles,
-    requestingData: login.requestingData,
     users: login.users,
-    showDropdown: login.showDropdown,
     selectedRole: login.selectedRole,
     selectedUser: login.selectedUser,
     loginButtonEnabled: login.loginButtonEnabled,
-    currentHoveredUserIndex: login.currentHoveredUserIndex
+    requestingData: login.requestingData
   };
 };
 
-const dispatchToProps = (dispatch, state) => {
+const dispatchToProps = (dispatch) => {
   return {
     loginSuccess: () => {
       dispatch(push('/main'));

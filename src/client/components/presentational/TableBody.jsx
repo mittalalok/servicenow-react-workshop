@@ -5,8 +5,16 @@ export const TableBody = (props) => {
   const { data, columnData } = props;
   if (!data) return null;
 
-  let onEdit =  (id) => {
+  let onEdit = (id) => {
     props.onEdit(id);
+  };
+
+  let onDelete = (id) => {
+    props.onDelete(id);
+  };
+
+  let onDetail = (id) => {
+    props.onDetail(id);
   };
 
   return (
@@ -16,27 +24,31 @@ export const TableBody = (props) => {
           <tr key={i}>
             {
               columnData.map((column, j) => (
-                <td className="table-body-column" key={j}>
+                <td key={j}>
                   {
                     row[column.id]
                   }
                 </td>
               ))
+            }{
+              (props.showActions) ?
+                (
+                  <td className="btn-group">
+                    <button type="button" className="btn btn-default" onClick={onDetail.bind(this, row['_id'])}>
+                      <span className="glyphicon glyphicon-eye-open"></span>
+                    </button>
+                    <button type="button" className="btn btn-default" onClick={onEdit.bind(this, row['_id'])}>
+                      <span className="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="button" className="btn btn-default" onClick={onDelete.bind(this, row['_id'])}>
+                      <span className="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                ) : (null)
             }
-            <td>
-              <button type="button" className="btn btn-default" aria-label="Right Align" onClick={onEdit.bind(this, row['_id'])}>
-                <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-              </button>
-            </td>
           </tr>
         ))
       }
     </tbody>
   );
-};
-
-TableBody.propTypes = {
-  onEdit: PropTypes.func,
-  data: PropTypes.array,
-  columnData: PropTypes.array
 };

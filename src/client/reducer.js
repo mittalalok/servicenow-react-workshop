@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { listReducer } from './reducers/listReducer';
 import loginReducer from './reducers/login';
+import manager from './reducers/manager';
 import { form }  from './reducers/form';
 
 const defaultReducer = (state = 0/*, action*/) => {
@@ -12,5 +13,6 @@ export default combineReducers({
   navLinks: defaultReducer,
   lists: listReducer,
   login: loginReducer,
-  form: form
+  form: form,
+  manager
 });
