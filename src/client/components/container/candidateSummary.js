@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Label from '../forms/label';
 import PropTypes from 'prop-types';
-import HorizontalRule from '../presentational/forms/horizontalRule';
 import Modal from '../presentational/modal/index.jsx';
 import { connect } from 'react-redux';
 import CandidateStatus from '../forms/candidateStatus.jsx';
@@ -140,7 +139,7 @@ class CandidateSummary extends Component {
   render(){
     if(!this.props.mapper)
       return null;
-    let template = <div><HorizontalRule />{this.mapKeysToTag(this.props.mapper)}{this.modal}</div>;
+    let template = <div>{this.mapKeysToTag(this.props.mapper)}{this.modal}</div>;
     return template;
   }
 }
@@ -162,7 +161,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state){
-  return { mapper: state.form.mapper, status: state.form.status, form: state.form };
+  let mapper = state.lists.mapper != undefined ? state.lists.mapper : state.form.mapper;
+  return { mapper: mapper, status: state.form.status, form: state.form };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CandidateSummary);

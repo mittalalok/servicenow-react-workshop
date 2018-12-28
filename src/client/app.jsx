@@ -18,6 +18,7 @@ import MainView from './components/container/main';
 import Login from './components/container/login';
 import UserProfile from './components/presentational/userProfile';
 import EventCandidates from './components/presentational/views/event/candidates';
+import SelectionView from './components/presentational/views/selection';
 
 import './sass/app.sass';
 
@@ -60,6 +61,7 @@ export default class App extends PureComponent {
               <Route path="/candidates/:id" render={()=>(<RenderForm/>)} />
               <Route path="/interviewers/:id" render={()=>(<RenderForm/>)} />
               <Route path="/events/:id/candidates" render={()=>(<EventCandidates/>)} />
+              <Route path='/selections/:selectionId/candidates/:candidateId' render={() => (<SelectionView />)} />
               <Route render={() => (<HomeView/>)}/>
             </Switch>
           </div>

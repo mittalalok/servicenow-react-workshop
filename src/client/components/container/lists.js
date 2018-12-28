@@ -60,9 +60,12 @@ class ListsView extends Component {
   onEdit = (id) => {
     this.dispatch({ type:'fetch_form', url:id, domain:window.location.hash });
   }
+  onDetail = (selectionId, candidateId) => {
+    this.dispatch({ type:'go_to_selection', domain:window.location.hash, selectionId: selectionId, candidateId: candidateId });
+  }
 
   render() {
-    return <Lists lists={this.props.lists} onSort={this.onSort} onSearch={this.onSearch} listType={this.listType} onEdit = {this.onEdit}/>;
+    return <Lists lists={this.props.lists} onSort={this.onSort} onSearch={this.onSearch} listType={this.listType} onEdit = {this.onEdit} onDetail={this.onDetail} />;
   }
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// import { goToSelection } from '../../actions/table';
 
 export const TableBody = (props) => {
   const { data, columnData } = props;
@@ -14,7 +15,7 @@ export const TableBody = (props) => {
   };
 
   let onDetail = (id) => {
-    props.onDetail(id);
+    props.onDetail('5c0e28580acfdaa862c630e0', id);
   };
 
   return (

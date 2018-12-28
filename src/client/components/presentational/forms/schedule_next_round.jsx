@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchBox from '../searchBox.jsx';
+import SearchBox from '../searchDropDown/index.jsx';
 import Label from '../forms/label';
 import Input from '../forms/input';
 import PropTypes from 'prop-types';
@@ -22,11 +22,6 @@ export default class ScheduleNextRound extends React.Component{
     this.props.setNextRoundDate(value);
   }
 
-  // scheduleRound(){
-  //   let round = { interviewer: this.props.selectedUser, date: this.props.next_round_date };
-  //   console.log('next round details:', this.props);
-  // }
-
   onUserChange(val){
     let role = { name:'Interviewer', id:'Interviewer' };
     val = { role: role, search: val };
@@ -41,7 +36,7 @@ export default class ScheduleNextRound extends React.Component{
       <form>
         <div className='col-sm-6 form-group'>
           <Label class='col-sm-12 col-form-label' required={true} value={INTERVIEWER}/>
-          <SearchBox onKeyDown={this.onUserChange.bind(this)} data={users} isLoading={requestingData} showDropdown={showDropdown} onUserSelect={onUserSelect} currentHoveredUserIndex={currentHoveredUserIndex} handleDropDownHover={handleDropDownHover} selectedValue={selectedValue} />
+          <SearchBox onSearch={this.onUserChange.bind(this)} data={users} isSearching={requestingData} showDropdown={showDropdown} onSelect={onUserSelect} currentHoveredUserIndex={currentHoveredUserIndex} handleDropDownHover={handleDropDownHover} selectedValue={selectedValue} />
         </div>
         <div className='col-sm-6 form-group'>
           <Label class='col-sm-12 col-form-label' required={true} value={DATE}/>

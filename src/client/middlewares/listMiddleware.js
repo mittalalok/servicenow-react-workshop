@@ -12,6 +12,9 @@ export const listsMiddleWare = store => next => action => {
   case 'fetch_form':
     fetchFormData(store, next, action);
     break;
+  case 'go_to_selection':
+    goToSelection(store, next, action);
+    break;
   default:
     next(action);
   }
@@ -34,6 +37,28 @@ const fetchFormData = (store, next, action) => {
       action.payload = res.data;
       window.location.hash = `${schmaName}/${action.url}`;
       next(action);
+    }
+  });
+};
+
+const goToSelection = (store, next, action) => {
+  let selections = 'selections';
+  let candidates = 'candidates';
+  let candidateUrl = `${SERVER_URL}${candidates}/${action.candidateId}`;
+  let selectionUrl = `${SERVER_URL}${selections}/${action.selectionId}`;
+
+  axios.get(candidateUrl).then(res => {
+    if(res.status === 200){
+      action.mapper = res.data;
+      // next(action);
+    }
+  });
+
+  axios.get(selectionUrl).then(res => {
+    if(res.status === 200){
+      action.selection = res.data;
+      window.location.hash = `${selections}/${action.selectionId}/${candidates}/${action.candidateId}`;
+      return next(action);
     }
   });
 };
