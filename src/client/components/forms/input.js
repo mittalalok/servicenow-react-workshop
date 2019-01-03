@@ -14,13 +14,31 @@ class Input extends Component {
     this.type = this.props.type;
   }
   handleChange(event){
+    // console.log('handleChange in input:', event.target.value);
     this.setState({ value: event.target.value });
     this.props.handleChange(this.props.mapKey, event.target.value);
+    // console.log('state now:', event.target.textContent);
   }
+
+  getOptions(obj){
+    let tag = [];
+    for(let option in obj){
+      tag.push(<option key={option} value={obj[option].value}>{obj[option].displayValue}</option>);
+    }
+    return tag;
+  }
+
   render(){
-    return <input className = {this.props.class}  type = {this.props.type} id = {this.props.mapKey} placeholder = {this.props.placeHolder}
-      onChange = {this.handleChange} value = {this.state.value || ''} required={this.props.required} minLength={this.props.min} maxLength={this.props.max} accept={this.props.accept} name={this.props.name} checked={this.props.checked}
-      readOnly={this.props.readonly} disabled={this.props.disabled} style={this.props.readonly || this.props.disabled ? readOnlyText : null} />;
+    if(this.props.type != 'select'){
+      return <input className = {this.props.class}  type = {this.props.type} id = {this.props.mapKey} placeholder = {this.props.placeHolder}
+        onChange = {this.handleChange} value = {this.state.value || ''} required={this.props.required} minLength={this.props.min} maxLength={this.props.max} accept={this.props.accept} name={this.props.name} checked={this.props.checked}
+        readOnly={this.props.readonly} disabled={this.props.disabled} style={this.props.readonly || this.props.disabled ? readOnlyText : null} />;
+    }
+    else{
+      return <select required={this.props.required} onChange={this.handleChange} defaultValue={this.props.value}>
+        {this.getOptions(this.props.options)}
+      </select>;
+    }
   }
 }
 
@@ -38,7 +56,8 @@ Input.propTypes = {
   name: PropTypes.string,
   checked: PropTypes.bool,
   readonly: PropTypes.bool,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  options: PropTypes.array
 };
 
 export default Input;

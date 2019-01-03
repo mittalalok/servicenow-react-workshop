@@ -6,6 +6,9 @@ export const formData = store => next => action => {
   case 'save_form':
     saveFormData(store, next, action);
     break;
+  case 'schedule_next_round':
+    scheduleNextRound(store, next, action);
+    break;
   default:
     next(action);
   }
@@ -24,4 +27,10 @@ const saveFormData = (store, next, action)=> {
     action.status = 500;
     next(action);
   });
+};
+
+const scheduleNextRound = (store, next, action) => {
+  console.log('scheduleNextRound middleware', action);
+  // console.log('scheduleNextRound middleware:', store);
+  // console.log('action:', action);
 };

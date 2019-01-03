@@ -60,7 +60,7 @@ class CandidateSummary extends Component {
       }
     }
     else{
-      let round = { interview: this.props.form.selectedUser, date: this.props.form.nextRoundDate };
+      let round = { interviewer: this.props.form.selectedUser, scheduled_date: this.props.form.nextRoundDate, duration: this.props.form.interview_duration, selection: this.props.selection, status: this.props.status, recommended: this.props.form.recommended, mode: this.props.form.interview_mode, location: this.props.form.interview_location };
       this.props.scheduleNextRound(round);
     }
     this.setModalState();
@@ -147,10 +147,11 @@ class CandidateSummary extends Component {
 CandidateSummary.propTypes = {
   mapper: PropTypes.object,
   displaySummary: PropTypes.bool,
-  status: PropTypes.number,
   saveForm: PropTypes.func,
   form: PropTypes.object,
-  scheduleNextRound: PropTypes.func
+  scheduleNextRound: PropTypes.func,
+  selection: PropTypes.object,
+  status: PropTypes.bool
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -162,7 +163,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 function mapStateToProps(state){
   let mapper = state.lists.mapper != undefined ? state.lists.mapper : state.form.mapper;
-  return { mapper: mapper, status: state.form.status, form: state.form };
+  return { mapper: mapper, form: state.form };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CandidateSummary);
