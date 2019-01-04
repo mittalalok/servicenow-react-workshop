@@ -1,8 +1,8 @@
 [
   {
   "skills": ["JavaScript", "Java", "React", "DS"], 
-  "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  "details": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+  "description": "IC 3 - Fullstack",
+  "details": "Looking for a very strong candiates at architect level ",
   "min_experience": 5,
   "max_experience": 7,
   "business_unit" : "Dev Studio",
@@ -12,8 +12,8 @@
   },
   {
     "skills": ["SQL", "Java", "Algo"], 
-    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "details": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+    "description": "IC 2",
+    "details": "Midlevel Engineer with strong Problems solving skills",
     "min_experience": 2,
     "max_experience": 3,
     "business_unit" : "Dev Studio",
@@ -23,8 +23,8 @@
   },
   {
     "skills": ["Agile", "Scrum", "Release Management"], 
-    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "details": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+    "description": "M3 - Release management",
+    "details": "Looking for senior folks with strong Release Managemnt skills",
     "min_experience": 10,
     "max_experience": 15,
     "business_unit" : "Community",
